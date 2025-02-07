@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "126860737484",
+    "project_id": "upick-e6d58",
+    "storage_bucket": "upick-e6d58.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126860737484:android:52d5006d7ee3f4202abb69",
+        "android_client_info": {
+          "package_name": "champlain.edu.surpirse_delivery_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8QqKeamXTn4MovrZpo9cvJ-Sd4WmxIms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
