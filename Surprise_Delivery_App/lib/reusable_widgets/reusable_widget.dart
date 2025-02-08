@@ -22,7 +22,7 @@ TextField reusableTextField(String text, IconData icon, bool isPasswordType,
     decoration: InputDecoration(
       prefixIcon: Icon(
         icon,
-        color: Colors.white70,
+        color: Colors.white,
       ),
       labelText: text,
       labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.9)),
