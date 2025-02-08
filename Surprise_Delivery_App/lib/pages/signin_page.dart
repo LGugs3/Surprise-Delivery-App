@@ -40,8 +40,8 @@ class _SignInPageState extends State<SignInPage> {
                 const SizedBox(
                   height: 30,
                 ),
-                reusableTextField("Enter UserName", Icons.person_outline, false,
-                    _emailTextController),
+                reusableTextField("Enter Username", Icons.person_outline, false,
+                _emailTextController),
                 const SizedBox(
                   height: 20,
                 ),
@@ -76,7 +76,7 @@ class _SignInPageState extends State<SignInPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Don't have account?",
+        const Text("Create a free account.",
             style: TextStyle(color: Colors.white70)),
         GestureDetector(
           onTap: () {
