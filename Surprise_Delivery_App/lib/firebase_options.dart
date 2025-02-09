@@ -45,7 +45,7 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions web = FirebaseOptions(
-    apiKey: "${dotenv.env['api_web']}",
+    apiKey: "${dotenv.env['WEB_API']}",
     appId: '1:126860737484:web:2ca49928fede2a272abb69',
     messagingSenderId: '126860737484',
     projectId: 'upick-e6d58',
@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
   );
 
   static FirebaseOptions android = FirebaseOptions(
-    apiKey: "${dotenv.env['api_android']}",
+    apiKey: "${dotenv.env['ANDROID_API']}",
     appId: '1:126860737484:android:52d5006d7ee3f4202abb69',
     messagingSenderId: '126860737484',
     projectId: 'upick-e6d58',
@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
   );
 
   static FirebaseOptions ios = FirebaseOptions(
-    apiKey: "${dotenv.env['api_iosandMacos']}",
+    apiKey: "${dotenv.env['IOS_API']}",
     appId: '1:126860737484:ios:c77f6d9da4b8a1682abb69',
     messagingSenderId: '126860737484',
     projectId: 'upick-e6d58',
@@ -72,7 +72,7 @@ class DefaultFirebaseOptions {
   );
 
   static FirebaseOptions macos = FirebaseOptions(
-    apiKey: "${dotenv.env['api_iosandMacos']}",
+    apiKey: "${dotenv.env['MAC_API']}",
     appId: '1:126860737484:ios:c77f6d9da4b8a1682abb69',
     messagingSenderId: '126860737484',
     projectId: 'upick-e6d58',
@@ -81,7 +81,7 @@ class DefaultFirebaseOptions {
   );
 
   static FirebaseOptions windows = FirebaseOptions(
-    apiKey: "${dotenv.env['api_windows']}",
+    apiKey: "${dotenv.env['WINDOWS_API']}",
     appId: '1:126860737484:web:41cfb80d7cd34b552abb69',
     messagingSenderId: '126860737484',
     projectId: 'upick-e6d58',
