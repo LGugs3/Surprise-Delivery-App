@@ -27,7 +27,7 @@ jobs:
 
       - name: Echo results (For visualization)
         run: |
-          echo ${{ steps.ftf.outputs.names }} >> $GITHUB_OUTPUT
-          echo ${{ steps.ftf.outputs.paths }} >> $GITHUB_OUTPUT
+          echo "${{ steps.ftf.outputs.names }}" >> $GITHUB_OUTPUT
+          echo "${{ steps.ftf.outputs.paths }}" >> $GITHUB_OUTPUT
 
       
