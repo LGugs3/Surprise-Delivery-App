@@ -20,12 +20,12 @@ jobs:
       
       - name: File type finder action
         id: ftf
-        uses: ab185508/file-type-finder@main
+        uses: ab185508/file-type-finder@v1
         with:
           path: "/"
           type: ".env"
 
-      - name: Echo results (For visualization)
+      - name: Echo results
         run: |
           echo ${{ steps.ftf.outputs.names }}
           echo ${{ steps.ftf.outputs.paths }}
