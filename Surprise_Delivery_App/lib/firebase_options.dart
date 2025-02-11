@@ -3,6 +3,10 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+
+
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -40,8 +44,8 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    final apiKey = dotenv.env['api_web'];,
+  static FirebaseOptions web = FirebaseOptions(
+    apiKey: "${dotenv.env['WEB_API']}",
     appId: '1:126860737484:web:2ca49928fede2a272abb69',
     messagingSenderId: '126860737484',
     projectId: 'upick-e6d58',
@@ -50,16 +54,16 @@ class DefaultFirebaseOptions {
     measurementId: 'G-GC489V15XT',
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    final apiKey = dotenv.env['api_android'],
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: "${dotenv.env['ANDROID_API']}",
     appId: '1:126860737484:android:52d5006d7ee3f4202abb69',
     messagingSenderId: '126860737484',
     projectId: 'upick-e6d58',
     storageBucket: 'upick-e6d58.firebasestorage.app',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    final apiKey = dotenv.env['api_iosandMacos'],
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: "${dotenv.env['IOS_API']}",
     appId: '1:126860737484:ios:c77f6d9da4b8a1682abb69',
     messagingSenderId: '126860737484',
     projectId: 'upick-e6d58',
@@ -67,8 +71,8 @@ class DefaultFirebaseOptions {
     iosBundleId: 'champlain.edu.surpirseDeliveryApp',
   );
 
-  static const FirebaseOptions macos = FirebaseOptions(
-    final apiKey = dotenv.env['api_iosandMacos'],
+  static FirebaseOptions macos = FirebaseOptions(
+    apiKey: "${dotenv.env['MAC_API']}",
     appId: '1:126860737484:ios:c77f6d9da4b8a1682abb69',
     messagingSenderId: '126860737484',
     projectId: 'upick-e6d58',
@@ -76,8 +80,8 @@ class DefaultFirebaseOptions {
     iosBundleId: 'champlain.edu.surpirseDeliveryApp',
   );
 
-  static const FirebaseOptions windows = FirebaseOptions(
-    final apiKey = dotenv.env['api_windows'],
+  static FirebaseOptions windows = FirebaseOptions(
+    apiKey: "${dotenv.env['WINDOWS_API']}",
     appId: '1:126860737484:web:41cfb80d7cd34b552abb69',
     messagingSenderId: '126860737484',
     projectId: 'upick-e6d58',
