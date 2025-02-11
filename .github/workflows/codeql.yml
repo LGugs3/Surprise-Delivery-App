@@ -45,27 +45,6 @@ jobs:
           flutter pub get
           flutter build web
   
-  ios-flutter:
-    name: Build Flutter on ios
-    runs-on: macos-latest
-
-    steps:
-      - name: Clone repo
-        uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-      - name: Build Flutter
-        env:
-          env_file: secrets.FIREBASE_AUTH
-        run: |
-          cd $GITHUB_WORKSPACE/Surprise_Delivery_App
-          echo "$env_file" > assets/.firebaseAuth.env
-          flutter pub get
-          flutter build ios --release --no-codesign
-
   android-flutter:
     name: Build Flutter on android
     runs-on: ubuntu-latest
@@ -84,4 +63,7 @@ jobs:
           echo "$env_file" > assets/.firebaseAuth.env
           flutter pub get
       - name: Build app bundle
-        run: flutter build appbundle
+        run: |
+          cd $GITHUB_WORKSPACE/Surprise_Delivery_App
+          echo "$env_file" > assets/.firebaseAuth.env
+          flutter build appbundle
