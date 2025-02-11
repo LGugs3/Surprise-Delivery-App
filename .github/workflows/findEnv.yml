@@ -7,9 +7,11 @@ name: find ENV
 
 on:
   push:
-    branches: .*
+    branches:
+      - '**'
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - '**'
 
 jobs:
   eslint:
