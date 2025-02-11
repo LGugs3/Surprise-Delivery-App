@@ -11,21 +11,76 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+Row buttonRow()
+{
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: <Widget>[
+      Column(
+        children: <Widget>[
+          ElevatedButton(
+            child:
+            const Text("Change Preferences"),
+            onPressed: () {
+              print("Change Preferences button pressed.");
+            },
+          )
+        ],
+      ),
+      Column(
+        children: <Widget>[
+          ElevatedButton(
+            child:
+            const Text("Place Order"),
+            onPressed: () {
+              print("Place Order button pressed.");
+            },
+          )
+        ],
+      ),
+      Column(
+        children: <Widget>[
+          ElevatedButton(
+            child:
+            const Text("View Map"),
+            onPressed: () {
+              print("View Map button pressed.");
+            },
+          )
+        ],
+      )
+    ],
+  );
+}
+
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue,
+      appBar: AppBar(
+        title: const Text("UPick"),
+        backgroundColor: Colors.amber,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: (){
+              FirebaseAuth.instance.signOut().then((value) {
+                print("Signed out");
+                Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SignInPage()));
+              });
+            },
+          )
+        ],
+      ),
       body: Center(
-        child: ElevatedButton(
-          child: Text("Logout"),
-          onPressed: () {
-            FirebaseAuth.instance.signOut().then((value) {
-              print("Signed Out");
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignInPage()));
-            });
-          },
-        ),
+        child:
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+            child: buttonRow(),
+          ),
       ),
     );
   }
