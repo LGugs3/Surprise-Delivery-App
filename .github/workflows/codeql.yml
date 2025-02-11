@@ -79,6 +79,9 @@ jobs:
           channel: stable
           cache: true
       - name: Get dependencies
-        run: flutter pub get
+        run: |
+          cd $GITHUB_WORKSPACE/Surprise_Delivery_App
+          echo "$env_file" > assets/.firebaseAuth.env
+          flutter pub get
       - name: Build app bundle
         run: flutter build appbundle
