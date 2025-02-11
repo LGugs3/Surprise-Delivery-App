@@ -37,4 +37,5 @@ jobs:
       - run:  |
           cd $GITHUB_WORKSPACE
           echo "::notice title={CurrDir}::$(pwd)"
+          echo "::notice title={allFiles}::$(ls -l)"
           flutter build linux
