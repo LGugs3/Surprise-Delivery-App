@@ -39,4 +39,5 @@ jobs:
           echo "::notice title={CurrDir}::$(pwd)"
           cd Surprise_Delivery_App
           echo "::notice title={allFiles}::$(ls -l)"
+          flutter pub get
           flutter build linux
