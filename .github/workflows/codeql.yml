@@ -20,7 +20,7 @@ on:
     - cron: '0 5 * * 3'
 
 jobs:
-  run-flutter:
+  web-flutter:
     name: Build Flutter
     runs-on: ubuntu-latest
 
@@ -40,4 +40,5 @@ jobs:
           cd Surprise_Delivery_App
           echo "::notice title={allFiles}::$(ls -l)"
           flutter pub get
-          flutter build linux
+          flutter test
+          flutter build web
