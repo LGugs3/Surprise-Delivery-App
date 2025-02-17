@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+// testuser@gmail.com
+// testPass
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
