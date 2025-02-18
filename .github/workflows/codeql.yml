@@ -24,6 +24,7 @@ jobs:
   web-flutter:
     name: Build Flutter on web
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Clone repo
@@ -51,6 +52,7 @@ jobs:
   android-flutter:
     name: Build Flutter on android
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repo
