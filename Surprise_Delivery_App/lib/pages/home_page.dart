@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
 import 'package:flutter/material.dart';
+import 'package:surpirse_delivery_app/pages/settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,22 +12,11 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-Row buttonRow()
+Row buttonRow(BuildContext context)
 {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: <Widget>[
-      Column(
-        children: <Widget>[
-          ElevatedButton(
-            child:
-            const Text("Change Preferences"),
-            onPressed: () {
-              print("Change Preferences button pressed.");
-            },
-          )
-        ],
-      ),
       Column(
         children: <Widget>[
           ElevatedButton(
@@ -45,6 +35,19 @@ Row buttonRow()
             const Text("View Map"),
             onPressed: () {
               print("View Map button pressed.");
+            },
+          )
+        ],
+      ),
+      Column(
+        children: <Widget>[
+          ElevatedButton(
+            child: const Text("Settings"),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingsPage()),
+              );
             },
           )
         ],
@@ -79,7 +82,7 @@ class _HomePageState extends State<HomePage> {
         child:
           Padding(
             padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
-            child: buttonRow(),
+            child: buttonRow(context),
           ),
       ),
     );
