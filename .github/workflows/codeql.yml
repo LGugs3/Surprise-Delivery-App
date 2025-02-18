@@ -35,10 +35,6 @@ jobs:
         with:
           channel: stable
           cache: true
-          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
-          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:"
-          pub-cache-key: "flutter-pub:os:-:channel:-:version:-:arch:-:hash:"
-          pub-cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:"
       - name: Update Ubuntu
         run: |
           sudo apt-get update -y
@@ -62,10 +58,6 @@ jobs:
         with:
           channel: stable
           cache: true
-          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:"
-          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:"
-          pub-cache-key: "flutter-pub:os:-:channel:-:version:-:arch:-:hash:"
-          pub-cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:"
       - name: Get dependencies
         run: |
           cd $GITHUB_WORKSPACE/Surprise_Delivery_App

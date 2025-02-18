@@ -3,6 +3,8 @@ import 'package:surpirse_delivery_app/pages/reset_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

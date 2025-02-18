@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/reusable_widget.dart';
@@ -57,8 +58,9 @@ class _SignInPageState extends State<SignInPage> {
                           email: _emailTextController.text,
                           password: _passwordTextController.text)
                       .then((value) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                        sendDBLastLogin(_emailTextController.text);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => HomePage()));
                   }).onError((error, stackTrace) {
                     print("Error ${error.toString()}");
                   });
@@ -107,5 +109,19 @@ class _SignInPageState extends State<SignInPage> {
             context, MaterialPageRoute(builder: (context) => ResetPassword())),
       ),
     );
+  }
+
+  void sendDBLastLogin(String user)
+  {
+    final lastLogin = { "time": Timestamp.now() };
+
+    var userDB = FirebaseFirestore.instance.doc("/users/$user");
+    userDB.collection("userAuth").doc("lastLogin").set(lastLogin, SetOptions(merge: true))
+        .onError((e, _) => print("Error writing lastLogin document: $e"));
+
+    var userHistory = userDB.collection("pastActions");
+    //change doc name to whatever the action the user performed
+    userHistory.doc("UserLogin").set({ "time": Timestamp.now() })
+      .onError((e, _) => print("Error writing new history document: $e"));
   }
 }
