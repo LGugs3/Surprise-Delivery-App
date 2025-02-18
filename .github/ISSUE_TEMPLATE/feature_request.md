@@ -7,11 +7,20 @@ assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## Prerequisites
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+* [ ] Does the project compile on web and android?
+* [ ] Are you running the latest version?
+* [ ] Have you checked out the correct branch?
+
+### Description
+
+[Description of the feature]
+
+**What branch will you use?** [Name of branch]
+
+**Expected behavior:**
+[What you expected to happen]
 
 **Describe alternatives you've considered**
 A clear and concise description of any alternative solutions or features you've considered.
