@@ -1,5 +1,6 @@
 // ignore_for_file: use_super_parameters, avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
 import 'package:flutter/material.dart';
@@ -69,11 +70,13 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(Icons.logout),
             tooltip: 'Logout',
             onPressed: (){
+              sendDBLogout(FirebaseAuth.instance.currentUser?.email);
               FirebaseAuth.instance.signOut().then((value) {
                 print("Signed out");
                 Navigator.push(context,
                 MaterialPageRoute(builder: (context) => SignInPage()));
               });
+
             },
           )
         ],
@@ -86,5 +89,13 @@ class _HomePageState extends State<HomePage> {
           ),
       ),
     );
+  }
+
+  void sendDBLogout(String? user)
+  {
+    print("username is: $user");
+    var userHistory = FirebaseFirestore.instance.collection("/users/$user/pastActions");
+    userHistory.doc("UserLoggedOut").set({"time": Timestamp.now()})
+        .onError((e, _) => print("Error writing new history document: $e"));
   }
 }

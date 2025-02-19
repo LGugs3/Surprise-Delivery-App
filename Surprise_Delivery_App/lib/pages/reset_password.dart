@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/reusable_widget.dart';
 //import 'package:surpirse_delivery_app/pages/home_page.dart';
@@ -50,11 +51,21 @@ class _ResetPasswordState extends State<ResetPassword> {
                 firebaseUIButton(context, "Reset Password", () {
                   FirebaseAuth.instance
                       .sendPasswordResetEmail(email: _emailTextController.text)
-                      .then((value) => Navigator.of(context).pop());
+                      .then((value) {
+                        addDBHistory(_emailTextController.text);
+                        Navigator.of(context).pop();
+                  });
                 })
               ],
             ),
           ))),
     );
+  }
+
+  void addDBHistory(String user)
+  {
+    var userHistory = FirebaseFirestore.instance.collection("/users/$user/pastActions");
+    userHistory.doc("PasswordResetRequested").set({"time": Timestamp.now()}, SetOptions(merge: true))
+      .onError((e, _) => print("Error writing new history document: $e"));
   }
 }

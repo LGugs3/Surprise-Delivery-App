@@ -1,4 +1,4 @@
-flcmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.14)
 project(runner LANGUAGES CXX)
 
 # Define the application target. To change its name, change BINARY_NAME in the
@@ -11,7 +11,7 @@ add_executable(${BINARY_NAME} WIN32
   "main.cpp"
   "utils.cpp"
   "win32_window.cpp"
-  "${FLUTTER_MANAGED_DIR}/generated_plugin_registrant.cc"
+  "${FLUTTER_MANAGED_DIR}/generated_plugin_registrant.dart"
   "Runner.rc"
   "runner.exe.manifest"
 )
