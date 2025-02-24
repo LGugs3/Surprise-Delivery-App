@@ -41,8 +41,8 @@ class _SignInPageState extends State<SignInPage> {
                 const SizedBox(
                   height: 30,
                 ),
-                reusableTextField("Enter Username", Icons.person_outline, false,
-                _emailTextController),
+                reusableTextField(
+                    "Enter Email", Icons.email, false, _emailTextController),
                 const SizedBox(
                   height: 20,
                 ),

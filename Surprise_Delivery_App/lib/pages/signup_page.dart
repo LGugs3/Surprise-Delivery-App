@@ -2,9 +2,9 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:surpirse_delivery_app/pages/preference_page.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/reusable_widget.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
-import 'package:surpirse_delivery_app/pages/home_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -51,8 +51,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                reusableTextField("Enter Email Id", Icons.person_outline, false,
-                    _emailTextController),
+                reusableTextField(
+                    "Enter Email Id", Icons.email, false, _emailTextController),
                 const SizedBox(
                   height: 20,
                 ),
@@ -68,8 +68,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           password: _passwordTextController.text)
                       .then((value) {
                     print("Created New Account");
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PreferencePage()));
                   }).onError((error, stackTrace) {
                     print("Error ${error.toString()}");
                   });
