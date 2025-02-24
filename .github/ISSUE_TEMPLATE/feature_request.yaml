@@ -1,0 +1,31 @@
+name: Feature Request
+description: Request/Create a feature
+title: "[Feature]: "
+projects:
+  - "LGugs3/2"
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Description of completed feature. Include steps to completion and why you want this feature.
+    validations:
+      required: true
+  - type: input
+    id: branchName
+    attributes:
+      label: What branch will you use?
+      description: Name of branch you will use/create
+      placeholder: feature-my-branch-name
+    validations:
+      required: true
+  - type: textarea
+    id: expBehavior
+    attributes:
+      label: Expected Behavior
+      description: What do you want to happen after completion?
+  - type: textarea
+    id: misc
+    attributes:
+      label: Additional Context
+      description: Any other context you would like to add
