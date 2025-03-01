@@ -1,0 +1,56 @@
+name: Bug Report
+description: File a bug report.
+title: "[Bug]: "
+labels: ["bug"]
+projects:
+  - "LGugs3/2"
+body:
+  - type: textarea
+    id: expBehavior
+    attributes:
+      label: Expected Behavior
+      description: expected interactions/what was supposed to happen
+    validations:
+      required: true
+  - type: textarea
+    id: actBehavior
+    attributes:
+      label: Actual Behavior
+      description: what actually happened
+      placeholder: "When interacting with ..."
+  - type: dropdown
+    id: platform
+    attributes:
+      label: What platform are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+        - Android Mobile
+        - Other
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction Steps
+      description: "How do you trigger this bug? Please walk through the steps you did."
+      value: |
+        1.
+        2.
+        3.
+        ...
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: misc
+    attributes:
+      label: Additional Context
+      description: Any aditional context you would like to add
