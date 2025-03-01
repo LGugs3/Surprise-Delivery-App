@@ -92,33 +92,42 @@ class _OrderFormState extends State<OrderForm> {
                 ),
                 // Dropdown for Allergies
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     // Dropdown for Allergies
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8.0, horizontal: 4.0),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width *
-                            0.4, // Set width to 40% of the screen
-                        child: MultiSelectDialogField(
-                          items: allergiesOptions
-                              .map((allergy) =>
-                                  MultiSelectItem<String>(allergy, allergy))
-                              .toList(),
-                          title: Text("Select Allergies"),
-                          selectedColor: Colors.orange.shade400,
-                          buttonText: Text(
-                            "Allergies",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                      child: Flexible(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.orange.shade100, // Background color
+                            borderRadius:
+                                BorderRadius.circular(12), // Rounded corners
+                            border: Border.all(
+                                color: Colors.orange.shade400,
+                                width: 2), // Border color and width
                           ),
-                          onConfirm: (selectedValues) {
-                            setState(() {
-                              _selectedAllergies =
-                                  selectedValues.cast<String>();
-                            });
-                          },
+                          child: MultiSelectDialogField<String>(
+                            items: allergiesOptions
+                                .map((allergy) =>
+                                    MultiSelectItem<String>(allergy, allergy))
+                                .toList(),
+                            title: Text("Select Allergies"),
+                            selectedColor: Colors.orange.shade400,
+                            buttonText: Text(
+                              "Allergies",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            buttonIcon: Icon(Icons.arrow_drop_down),
+                            onConfirm: (selectedValues) {
+                              setState(() {
+                                _selectedAllergies =
+                                    selectedValues.cast<String>();
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -126,27 +135,36 @@ class _OrderFormState extends State<OrderForm> {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8.0, horizontal: 4.0),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width *
-                            0.4, // Set width to 40% of the screen
-                        child: MultiSelectDialogField(
-                          items: dietaryRestrictionsOptions
-                              .map((restriction) => MultiSelectItem<String>(
-                                  restriction, restriction))
-                              .toList(),
-                          title: Text("Select Dietary Restrictions"),
-                          selectedColor: Colors.orange.shade400,
-                          buttonText: Text(
-                            "Dietary Restrictions",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                      child: Flexible(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.orange.shade100, // Background color
+                            borderRadius:
+                                BorderRadius.circular(12), // Rounded corners
+                            border: Border.all(
+                                color: Colors.orange.shade400,
+                                width: 2), // Border color and width
                           ),
-                          onConfirm: (selectedValues) {
-                            setState(() {
-                              _selectedDietaryRestrictions =
-                                  selectedValues.cast<String>();
-                            });
-                          },
+                          child: MultiSelectDialogField<String>(
+                            items: dietaryRestrictionsOptions
+                                .map((restriction) => MultiSelectItem<String>(
+                                    restriction, restriction))
+                                .toList(),
+                            title: Text("Select Dietary Restrictions"),
+                            selectedColor: Colors.orange.shade400,
+                            buttonText: Text(
+                              "Dietary Restrictions",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            buttonIcon: Icon(Icons.arrow_drop_down),
+                            onConfirm: (selectedValues) {
+                              setState(() {
+                                _selectedDietaryRestrictions =
+                                    selectedValues.cast<String>();
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ),
