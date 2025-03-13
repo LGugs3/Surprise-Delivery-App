@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:surpirse_delivery_app/pages/preference_page.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/reusable_widget.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
 import 'package:surpirse_delivery_app/pages/home_page.dart';
