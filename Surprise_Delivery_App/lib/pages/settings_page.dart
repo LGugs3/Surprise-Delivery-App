@@ -16,9 +16,9 @@ class SettingsPage extends StatelessWidget {
           children: [
             // Update preferences button
             ElevatedButton(
-              child: const Text("Update Preferences"),
+              child: const Text("Update Food Preferences"),
               onPressed: () {
-                print("Change Preferences button pressed.");
+                print("Update Food Preferences button pressed.");
               },
             ),
             // Reset Password Button (Sends to reset password Page)
@@ -42,7 +42,7 @@ class SettingsPage extends StatelessWidget {
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'User ID: ${FirebaseAuth.instance.currentUser?.uid ?? 'Unknown'}',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ),

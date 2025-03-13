@@ -11,31 +11,32 @@ Image logoWidget(String imageName) {
 }
 
 TextField reusableTextField(String text, IconData icon, bool isPasswordType,
-    TextEditingController controller) {
+    TextEditingController controller,
+    {TextInputAction textInputAction = TextInputAction.next, // Default action
+      Function(String)? onSubmitted,
+    }) {
   return TextField(
     controller: controller,
     obscureText: isPasswordType,
     enableSuggestions: !isPasswordType,
     autocorrect: !isPasswordType,
     cursorColor: Colors.white,
-    style: TextStyle(color: Colors.white.withValues(alpha: 0.9)),
+    textInputAction: textInputAction, // Ensures "Enter" behavior is set
+    onSubmitted: onSubmitted, // This should be passed correctly
+    style: const TextStyle(color: Colors.white),
     decoration: InputDecoration(
-      prefixIcon: Icon(
-        icon,
-        color: Colors.white,
-      ),
+      prefixIcon: Icon(icon, color: Colors.white70),
       labelText: text,
-      labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.9)),
+      labelStyle: const TextStyle(color: Colors.white70),
       filled: true,
       floatingLabelBehavior: FloatingLabelBehavior.never,
-      fillColor: Colors.white.withValues(alpha: 0.3),
+      fillColor: Colors.white.withOpacity(0.3),
       border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: const BorderSide(width: 0, style: BorderStyle.none)),
     ),
-    keyboardType: isPasswordType
-        ? TextInputType.visiblePassword
-        : TextInputType.emailAddress,
+    keyboardType:
+    isPasswordType ? TextInputType.visiblePassword : TextInputType.emailAddress,
   );
 }
 

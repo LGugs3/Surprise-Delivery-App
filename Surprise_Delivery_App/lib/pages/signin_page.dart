@@ -18,6 +18,20 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final TextEditingController _passwordTextController = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
+
+  // Helper function to sign a user in and check it's credentials
+  void _signIn() {
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+        email: _emailTextController.text, password: _passwordTextController.text)
+        .then((value) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    }).onError((error, stackTrace) {
+      print("Error ${error.toString()}");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,29 +54,18 @@ class _SignInPageState extends State<SignInPage> {
                 const SizedBox(
                   height: 30,
                 ),
-                reusableTextField("Enter Username", Icons.person_outline, false,
+                reusableTextField("Enter Username or Email", Icons.person_outline, false,
                 _emailTextController),
                 const SizedBox(
                   height: 20,
                 ),
                 reusableTextField("Enter Password", Icons.lock_outline, true,
-                    _passwordTextController),
-                const SizedBox(
-                  height: 5,
-                ),
+                    _passwordTextController,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (value) => _signIn()),
+                const SizedBox(height: 5),
                 forgetPassword(context),
-                firebaseUIButton(context, "Sign In", () {
-                  FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                          email: _emailTextController.text,
-                          password: _passwordTextController.text)
-                      .then((value) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                  }).onError((error, stackTrace) {
-                    print("Error ${error.toString()}");
-                  });
-                }),
+                firebaseUIButton(context, "Sign In", _signIn),
                 signUpOption()
               ],
             ),
