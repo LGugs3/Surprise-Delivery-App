@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/reset_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
 
 class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,6 +21,7 @@ class SettingsPage extends StatelessWidget {
             ElevatedButton(
               child: const Text("Update Preferences"),
               onPressed: () {
+                // ignore: avoid_print
                 print("Change Preferences button pressed.");
               },
             ),
@@ -32,6 +36,14 @@ class SettingsPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ResetPassword()),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: const Text("Second Order Form Page"),
+              onPressed: () {
+                Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SecondOrderPage()),
                 );
               },
             ),
