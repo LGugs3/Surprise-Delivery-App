@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/order_form.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/reusable_widget.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
+import 'package:surpirse_delivery_app/pages/home_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -17,6 +18,26 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _passwordTextController = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _userNameTextController = TextEditingController();
+  String? _errorMessage; // The error message will be held here acoording to the error
+
+  Future<void> _signUp() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailTextController.text.trim(),
+        password: _passwordTextController.text.trim(),
+      );
+      print("Created New Account");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMessage = e.message ?? "An unexpected error occurred.";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,17 +51,22 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
       body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-            hexStringToColor("faf31f"),
-            hexStringToColor("faae1f"),
-            hexStringToColor("faf31f")
-          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-          child: SingleChildScrollView(
-              child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 120, 20, 0),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              hexStringToColor("faf31f"),
+              hexStringToColor("faae1f"),
+              hexStringToColor("faf31f")
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 120, 20, 0),
             child: Column(
               children: <Widget>[
                 const SizedBox(
