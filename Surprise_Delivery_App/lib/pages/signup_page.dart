@@ -2,7 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:surpirse_delivery_app/pages/preference_page.dart';
+import 'package:surpirse_delivery_app/pages/order_form.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/reusable_widget.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
 
@@ -68,10 +68,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           password: _passwordTextController.text)
                       .then((value) {
                     print("Created New Account");
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PreferencePage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => OrderForm()));
                   }).onError((error, stackTrace) {
                     print("Error ${error.toString()}");
                   });

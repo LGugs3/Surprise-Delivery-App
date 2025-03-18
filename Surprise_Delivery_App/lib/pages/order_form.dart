@@ -10,7 +10,7 @@ class OrderForm extends StatefulWidget {
 }
 
 class _OrderFormState extends State<OrderForm> {
-  //allergies list
+  // Allergies list
   final List<String> allergiesOptions = [
     'Peanuts',
     'Tree Nuts',
@@ -22,7 +22,7 @@ class _OrderFormState extends State<OrderForm> {
     'Eggs'
   ];
 
-  //dietary restrictions list
+  // Dietary restrictions list
   final List<String> dietaryRestrictionsOptions = [
     'Vegetarian',
     'Vegan',
@@ -32,192 +32,221 @@ class _OrderFormState extends State<OrderForm> {
     'Gluten Free'
   ];
 
-  // Selected items for allergies and dietary restrictions
-  List<String> _selectedAllergies = [];
-  List<String> _selectedDietaryRestrictions = [];
+  // List to store meal data
+  List<Meal> _meals = [Meal()];
+
+  // Function to add a new meal
+  void _addMeal() {
+    setState(() {
+      _meals.add(Meal());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Stack(
-            children: [
-              // Black border (outline effect)
-              Text(
-                "Help Us Pick!",
-                style: GoogleFonts.lilitaOne(
-                  fontSize: 30,
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 4
-                    ..color = Colors.black, // Border color
-                ),
+      appBar: AppBar(
+        title: Stack(
+          children: [
+            Text(
+              "Help Us Pick!",
+              style: GoogleFonts.lilitaOne(
+                fontSize: 30,
+                foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 4
+                  ..color = Colors.black,
               ),
-              // Main text with color
-              Text(
-                "Help Us Pick!",
-                style: GoogleFonts.lilitaOne(
-                  fontSize: 30,
-                  color: Colors.orange.shade400,
-                ),
+            ),
+            Text(
+              "Help Us Pick!",
+              style: GoogleFonts.lilitaOne(
+                fontSize: 30,
+                color: Colors.orange.shade400,
               ),
+            ),
+          ],
+        ),
+        centerTitle: true,
+        backgroundColor:
+            const Color.fromARGB(255, 239, 214, 29).withValues(alpha: 0.5),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(8.0),
+        color: Colors.orange.shade200,
+        child: ListView.builder(
+          itemCount: _meals.length,
+          itemBuilder: (context, index) {
+            return _buildMealElement(_meals[index], index);
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addMeal,
+        // ignore: sort_child_properties_last
+        child: Icon(Icons.add),
+        backgroundColor: Colors.orange.shade400,
+      ),
+    );
+  }
+
+  // method to build each meal
+  Widget _buildMealElement(Meal meal, int index) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 16.0),
+      padding: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.pink.shade50,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.pink.shade200, width: 2),
+      ),
+      child: Column(
+        children: <Widget>[
+          Text(
+            "Meal ${index + 1}",
+            style: GoogleFonts.lilitaOne(fontSize: 20),
+          ),
+          SizedBox(height: 10),
+          _buildMealItem("Main", meal, "main", index),
+          _buildMealItem("Side", meal, "side", index),
+          _buildMealItem("Drink", meal, "drink", index),
+          _buildMealItem("Dessert", meal, "dessert", index),
+          SizedBox(height: 12),
+          // Dropdowns for allergies and dietary restrictions
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _buildDropdown(meal, "allergies", index),
+              SizedBox(height: 8),
+              _buildDropdown(meal, "dietaryRestrictions", index),
             ],
           ),
-          centerTitle: true,
-          backgroundColor:
-              const Color.fromARGB(255, 239, 214, 29).withValues(alpha: 0.5),
+          SizedBox(height: 12),
+        ],
+      ),
+    );
+  }
+
+  // method to build each meal item (main, side, drink, dessert)
+  Widget _buildMealItem(String label, Meal meal, String mealType, int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          "$label:",
+          style: GoogleFonts.lilitaOne(fontSize: 18),
         ),
-        body: Container(
-          padding: EdgeInsets.all(8.0),
-          color: Colors.orange.shade200,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start, // Aligns text inside to the left
-              children: <Widget>[
-                Center(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 20),
-                    padding: EdgeInsets.all(0.8),
-                    color: Colors.pink.shade50,
-                    child: Text(
-                      "Anything we should know for this meal?",
-                      style: GoogleFonts.lilitaOne(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                // Dropdown for Allergies
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    // Dropdown for Allergies
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 4.0),
-                      child: Flexible(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.orange.shade100, // Background color
-                            borderRadius:
-                                BorderRadius.circular(12), // Rounded corners
-                            border: Border.all(
-                                color: Colors.orange.shade400,
-                                width: 2), // Border color and width
-                          ),
-                          child: MultiSelectDialogField<String>(
-                            items: allergiesOptions
-                                .map((allergy) =>
-                                    MultiSelectItem<String>(allergy, allergy))
-                                .toList(),
-                            title: Text("Select Allergies"),
-                            selectedColor: Colors.orange.shade400,
-                            buttonText: Text(
-                              "Allergies",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            buttonIcon: Icon(Icons.arrow_drop_down),
-                            onConfirm: (selectedValues) {
-                              setState(() {
-                                _selectedAllergies =
-                                    selectedValues.cast<String>();
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Dropdown for Dietary Restrictions
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 4.0),
-                      child: Flexible(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.orange.shade100, // Background color
-                            borderRadius:
-                                BorderRadius.circular(12), // Rounded corners
-                            border: Border.all(
-                                color: Colors.orange.shade400,
-                                width: 2), // Border color and width
-                          ),
-                          child: MultiSelectDialogField<String>(
-                            items: dietaryRestrictionsOptions
-                                .map((restriction) => MultiSelectItem<String>(
-                                    restriction, restriction))
-                                .toList(),
-                            title: Text("Select Dietary Restrictions"),
-                            selectedColor: Colors.orange.shade400,
-                            buttonText: Text(
-                              "Dietary Restrictions",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            buttonIcon: Icon(Icons.arrow_drop_down),
-                            onConfirm: (selectedValues) {
-                              setState(() {
-                                _selectedDietaryRestrictions =
-                                    selectedValues.cast<String>();
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12),
-                SizedBox(height: 12),
-                Container(
-                  width: 100,
-                  height: 80,
-                  alignment: Alignment.center,
-                  color: Colors.orange.shade400,
-                  child: Text(
-                    "main:",
-                    style: GoogleFonts.lilitaOne(fontSize: 24),
-                  ),
-                ),
-                SizedBox(height: 12),
-                Container(
-                  width: 100,
-                  height: 80,
-                  alignment: Alignment.center,
-                  color: Colors.orange.shade400,
-                  child: Text(
-                    "side:",
-                    style: GoogleFonts.lilitaOne(fontSize: 24),
-                  ),
-                ),
-                SizedBox(height: 12),
-                Container(
-                  width: 100,
-                  height: 80,
-                  alignment: Alignment.center,
-                  color: Colors.orange.shade400,
-                  child: Text(
-                    "drink:",
-                    style: GoogleFonts.lilitaOne(fontSize: 24),
-                  ),
-                ),
-                SizedBox(height: 12),
-                Container(
-                  width: 100,
-                  height: 80,
-                  alignment: Alignment.center,
-                  color: Colors.orange.shade400,
-                  child: Text(
-                    "dessert:",
-                    style: GoogleFonts.lilitaOne(fontSize: 24),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ));
+        Spacer(),
+        _buildCounterButtons(meal, mealType),
+      ],
+    );
+  }
+
+  // Counter buttons
+  Widget _buildCounterButtons(Meal meal, String mealType) {
+    return Row(
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.remove, color: Colors.orange.shade400),
+          onPressed: () {
+            setState(() {
+              meal.decrementCounter(mealType);
+            });
+          },
+        ),
+        Text(
+          "${meal.getCounter(mealType)}",
+          style: GoogleFonts.lilitaOne(fontSize: 20),
+        ),
+        IconButton(
+          icon: Icon(Icons.add, color: Colors.orange.shade400),
+          onPressed: () {
+            setState(() {
+              meal.incrementCounter(mealType);
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  // Dropdown for allergies or dietary restrictions
+  Widget _buildDropdown(Meal meal, String type, int index) {
+    List<String> options =
+        type == "allergies" ? allergiesOptions : dietaryRestrictionsOptions;
+
+    return MultiSelectDialogField<String>(
+      items: options
+          .map((option) => MultiSelectItem<String>(option, option))
+          .toList(),
+      title: Text(type == "allergies"
+          ? "Select Allergies"
+          : "Select Dietary Restrictions"),
+      selectedColor: Colors.orange.shade400,
+      buttonText: Text(
+        type == "allergies" ? "Allergies" : "Dietary Restrictions",
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      buttonIcon: Icon(Icons.arrow_drop_down),
+      onConfirm: (selectedValues) {
+        setState(() {
+          if (type == "allergies") {
+            meal.selectedAllergies = selectedValues.cast<String>();
+          } else {
+            meal.selectedDietaryRestrictions = selectedValues.cast<String>();
+          }
+        });
+      },
+    );
+  }
+}
+
+// Meal class to hold the meal state
+class Meal {
+  int mainCount = 0;
+  int sideCount = 0;
+  int drinkCount = 0;
+  int dessertCount = 0;
+  List<String> selectedAllergies = [];
+  List<String> selectedDietaryRestrictions = [];
+
+  // Increment counter
+  void incrementCounter(String mealType) {
+    if (mealType == "main") {
+      mainCount++;
+    } else if (mealType == "side") {
+      sideCount++;
+    } else if (mealType == "drink") {
+      drinkCount++;
+    } else if (mealType == "dessert") {
+      dessertCount++;
+    }
+  }
+
+  // Decrement counter
+  void decrementCounter(String mealType) {
+    if (mealType == "main" && mainCount > 0) {
+      mainCount--;
+    } else if (mealType == "side" && sideCount > 0) {
+      sideCount--;
+    } else if (mealType == "drink" && drinkCount > 0) {
+      drinkCount--;
+    } else if (mealType == "dessert" && dessertCount > 0) {
+      dessertCount--;
+    }
+  }
+
+  // Get the current counter value for a meal type
+  int getCounter(String mealType) {
+    if (mealType == "main") {
+      return mainCount;
+    } else if (mealType == "side") {
+      return sideCount;
+    } else if (mealType == "drink") {
+      return drinkCount;
+    } else if (mealType == "dessert") {
+      return dessertCount;
+    }
+    return 0;
   }
 }
