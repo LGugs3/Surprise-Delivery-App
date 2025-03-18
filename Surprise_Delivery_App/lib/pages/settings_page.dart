@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/reset_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
 
 class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +21,8 @@ class SettingsPage extends StatelessWidget {
             ElevatedButton(
               child: const Text("Update Food Preferences"),
               onPressed: () {
-                print("Update Food Preferences button pressed.");
+                // ignore: avoid_print
+                print("Change Preferences button pressed.");
               },
             ),
             // Reset Password Button (Sends to reset password Page)
@@ -35,6 +39,18 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ElevatedButton(
+                child: const Text("Second Order Form Page"),
+                onPressed: () {
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SecondOrderPage()),
+                  );
+                },
+              ),
+            )
+            ,
             // Footer that displays User's Firebase UID
             Padding(
               padding: const EdgeInsets.all(8.0),

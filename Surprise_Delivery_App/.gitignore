@@ -13,6 +13,8 @@
 migrate_working_dir/
 *.env
 .vscode/
+**/*.ppk
+
 
 # IntelliJ related
 *.iml
