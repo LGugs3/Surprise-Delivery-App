@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
+import 'package:surpirse_delivery_app/pages/base_map.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -35,6 +36,10 @@ Row buttonRow(BuildContext context)
             const Text("View Map"),
             onPressed: () {
               print("View Map button pressed.");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BaseMap()),
+              );
             },
           )
         ],
