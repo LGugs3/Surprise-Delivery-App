@@ -41,27 +41,21 @@ class _SignInPageState extends State<SignInPage> {
                   height: 30,
                 ),
                 reusableTextField(
-                    "Enter Email", Icons.email, false, _emailTextController),
+                    "Enter Email", Icons.email, false, _emailTextController, givenKey: Key("Email Input")),
                 const SizedBox(
                   height: 20,
                 ),
                 reusableTextField("Enter Password", Icons.lock_outline, true,
-                    _passwordTextController),
+                    _passwordTextController, givenKey: Key("Password Input")),
                 const SizedBox(
                   height: 5,
                 ),
                 forgetPassword(context),
-                firebaseUIButton(context, "Sign In", () {
-                  FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                          email: _emailTextController.text,
-                          password: _passwordTextController.text)
-                      .then((value) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                  }).onError((error, stackTrace) {
-                    print("Error ${error.toString()}");
-                  });
+                firebaseUIButton(givenKey: Key("Login Submit"), context, "Sign In", () {
+                  if (authenticateFirebase())
+                  {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                  }
                 }),
                 signUpOption()
               ],
@@ -70,6 +64,21 @@ class _SignInPageState extends State<SignInPage> {
         ),
       ),
     );
+  }
+
+  bool authenticateFirebase() {
+    FirebaseAuth.instance
+      .signInWithEmailAndPassword(
+      email: _emailTextController.text,
+      password: _passwordTextController.text)
+      .then((value) {
+        return true;
+      }).onError((error, stackTrace) {
+        print("Error ${error.toString()}");
+        return false;
+      });
+
+    return false;
   }
 
   Row signUpOption() {

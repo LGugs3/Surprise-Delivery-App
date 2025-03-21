@@ -7,24 +7,61 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:surpirse_delivery_app/pages/signin_page.dart';
 
-import 'package:surpirse_delivery_app/main.dart';
+class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
+//firebase doesn't like being used for testing so can't use sign in until i learn a lot more about mockito
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  //for future tests
+  final mockObserver = MockNavigatorObserver();
+  //sign-in widgets
+  Finder emailInput = find.byKey(Key("Email Input"));
+  Finder passInput = find.byKey(Key("Password Input"));
+  Finder submitButton = find.byKey(Key("Login Submit"));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  group("Login Page", (){
+    testWidgets('Verify Widgets Exist', (WidgetTester tester) async {
+      await tester.pumpWidget(
+          MaterialApp(
+            home: const SignInPage(),
+            navigatorObservers: [mockObserver],
+          )
+      );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      //confirm widgets exist
+      expect(emailInput, findsOneWidget);
+      expect(passInput, findsOneWidget);
+      expect(submitButton, findsOneWidget);
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    testWidgets("Text can be entered into fields", (WidgetTester tester) async {
+      await tester.pumpWidget(
+          MaterialApp(
+            home: const SignInPage(),
+            navigatorObservers: [mockObserver],
+          )
+      );
+      //set username
+      String usernameStr = "testuser@gmail.com";
+      await tester.enterText(emailInput, usernameStr);
+
+      //set password
+      String? passStr = "testPass";
+      await tester.enterText(passInput, passStr);
+
+      //press button and wait until no more frames to show
+      expect(find.text(usernameStr), findsOneWidget);
+      expect(find.text(passStr), findsOneWidget);
+    });
   });
+
+  // Tap the '+' icon and trigger a frame.
+  //await tester.tap(find.byIcon(Icons.add));
+  //await tester.pump();
+
+  // Verify that our counter has incremented.
+  //expect(find.text('0'), findsNothing);
+  //expect(find.text('1'), findsOneWidget);
 }
