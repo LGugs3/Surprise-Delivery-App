@@ -2,7 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:surpirse_delivery_app/pages/preference_page.dart';
+import 'package:surpirse_delivery_app/pages/order_form.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/reusable_widget.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
 import 'package:surpirse_delivery_app/pages/home_page.dart';
@@ -69,27 +69,40 @@ class _SignUpPageState extends State<SignUpPage> {
             padding: const EdgeInsets.fromLTRB(20, 120, 20, 0),
             child: Column(
               children: <Widget>[
-                const SizedBox(height: 20),
-                reusableTextField("Enter UserName", Icons.person_outline, false, _userNameTextController),
-                const SizedBox(height: 20),
-                reusableTextField("Enter Email Id", Icons.person_outline, false, _emailTextController),
-                const SizedBox(height: 20),
-                reusableTextField("Enter Password", Icons.lock_outlined, true, _passwordTextController),
-                if (_errorMessage != null) // Display error message if there is one
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      _errorMessage!,
-                      style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                const SizedBox(height: 20),
-                firebaseUIButton(context, "Sign Up", _signUp),
+                const SizedBox(
+                  height: 20,
+                ),
+                reusableTextField("Enter UserName", Icons.person_outline, false,
+                    _userNameTextController),
+                const SizedBox(
+                  height: 20,
+                ),
+                reusableTextField(
+                    "Enter Email Id", Icons.email, false, _emailTextController),
+                const SizedBox(
+                  height: 20,
+                ),
+                reusableTextField("Enter Password", Icons.lock_outlined, true,
+                    _passwordTextController),
+                const SizedBox(
+                  height: 20,
+                ),
+                firebaseUIButton(context, "Sign Up", () {
+                  FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: _emailTextController.text,
+                          password: _passwordTextController.text)
+                      .then((value) {
+                    print("Created New Account");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => OrderForm()));
+                  }).onError((error, stackTrace) {
+                    print("Error ${error.toString()}");
+                  });
+                })
               ],
             ),
-          ),
-        ),
-      ),
+          ))),
     );
   }
 }
