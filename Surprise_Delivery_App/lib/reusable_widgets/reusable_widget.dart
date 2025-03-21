@@ -30,7 +30,7 @@ TextField reusableTextField(String text, IconData icon, bool isPasswordType,
       labelStyle: const TextStyle(color: Colors.white70),
       filled: true,
       floatingLabelBehavior: FloatingLabelBehavior.never,
-      fillColor: Colors.white.withOpacity(0.3),
+      fillColor: Colors.white.withValues(alpha: 0.3),
       border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: const BorderSide(width: 0, style: BorderStyle.none)),
