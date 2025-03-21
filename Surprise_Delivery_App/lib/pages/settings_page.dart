@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/reset_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +6,11 @@ import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+
+  String getFirebaseUID()
+  {
+    return Firebase.apps.isEmpty ? "Unknown" : FirebaseAuth.instance.currentUser?.uid ?? "Unknown";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +59,7 @@ class SettingsPage extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(10),
                 child: Text(
-                  'User ID: ${FirebaseAuth.instance.currentUser?.uid ?? 'Unknown'}',
+                  'User ID: ${getFirebaseUID()}',
                   style: TextStyle(color: Colors.white),
                 ),
               ),

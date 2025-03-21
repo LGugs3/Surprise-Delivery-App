@@ -52,10 +52,15 @@ class _SignInPageState extends State<SignInPage> {
                 ),
                 forgetPassword(context),
                 firebaseUIButton(givenKey: Key("Login Submit"), context, "Sign In", () {
-                  if (authenticateFirebase())
-                  {
+                  FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                      email: _emailTextController.text,
+                      password: _passwordTextController.text)
+                      .then((value) {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                  }
+                  }).onError((error, stackTrace) {
+                    print("Error ${error.toString()}");
+                  });
                 }),
                 signUpOption()
               ],
@@ -64,21 +69,6 @@ class _SignInPageState extends State<SignInPage> {
         ),
       ),
     );
-  }
-
-  bool authenticateFirebase() {
-    FirebaseAuth.instance
-      .signInWithEmailAndPassword(
-      email: _emailTextController.text,
-      password: _passwordTextController.text)
-      .then((value) {
-        return true;
-      }).onError((error, stackTrace) {
-        print("Error ${error.toString()}");
-        return false;
-      });
-
-    return false;
   }
 
   Row signUpOption() {

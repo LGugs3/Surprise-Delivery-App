@@ -21,6 +21,7 @@ Row buttonRow(BuildContext context)
       Column(
         children: <Widget>[
           ElevatedButton(
+            key: Key("home-page-order"),
             child:
             const Text("Place Order"),
             onPressed: () {
@@ -32,10 +33,10 @@ Row buttonRow(BuildContext context)
       Column(
         children: <Widget>[
           ElevatedButton(
+            key: Key("View Map"),
             child:
             const Text("View Map"),
             onPressed: () {
-              print("View Map button pressed.");
               Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => BaseMap()),
@@ -47,6 +48,7 @@ Row buttonRow(BuildContext context)
       Column(
         children: <Widget>[
           ElevatedButton(
+            key: Key("Settings Button"),
             child: const Text("Settings"),
             onPressed: () {
               Navigator.push(
@@ -72,6 +74,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.amber,
         actions: [
           IconButton(
+            key: Key("home-logout-button"),
             icon: const Icon(Icons.logout),
             tooltip: 'Logout',
             onPressed: (){
