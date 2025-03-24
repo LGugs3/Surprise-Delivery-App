@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
+import 'package:surpirse_delivery_app/pages/order_form.dart';
 import 'package:surpirse_delivery_app/pages/base_map.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,8 +14,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-Row buttonRow(BuildContext context)
-{
+Row buttonRow(BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: <Widget>[
@@ -25,7 +25,10 @@ Row buttonRow(BuildContext context)
             child:
             const Text("Place Order"),
             onPressed: () {
-              print("Place Order button pressed.");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OrderForm()),
+              );
             },
           )
         ],
@@ -77,22 +80,21 @@ class _HomePageState extends State<HomePage> {
             key: Key("home-logout-button"),
             icon: const Icon(Icons.logout),
             tooltip: 'Logout',
-            onPressed: (){
+            onPressed: () {
               FirebaseAuth.instance.signOut().then((value) {
                 print("Signed out");
                 Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SignInPage()));
+                    MaterialPageRoute(builder: (context) => SignInPage()));
               });
             },
           )
         ],
       ),
       body: Center(
-        child:
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
-            child: buttonRow(context),
-          ),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+          child: buttonRow(context),
+        ),
       ),
     );
   }
