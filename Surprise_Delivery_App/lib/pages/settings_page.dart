@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/reset_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +24,7 @@ class SettingsPage extends StatelessWidget {
               child: const Text("Update Preferences"),
               onPressed: () {
                 // ignore: avoid_print
-                print("Change Preferences button pressed.");
+                print("Update Food Preferences button pressed.");
               },
             ),
             // Reset Password Button (Sends to reset password Page)
@@ -39,14 +41,18 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
-            ElevatedButton(
-              child: const Text("Second Order Form Page"),
-              onPressed: () {
-                Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SecondOrderPage()),
-                );
-              },
-            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ElevatedButton(
+                child: const Text("Second Order Form Page"),
+                onPressed: () {
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SecondOrderPage()),
+                  );
+                },
+              ),
+            )
+            ,
             // Footer that displays User's Firebase UID
             Padding(
               padding: const EdgeInsets.all(8.0),
