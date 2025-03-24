@@ -8,12 +8,12 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/LGugs3/Surprise-Delivery-App)
 
 ## Code Quality
-[![CodeQL Scheduled Activity](https://github.com/LGugs3/Surprise-Delivery-App/actions/workflows/codeql.yml/badge.svg?event=schedule)](https://github.com/LGugs3/Surprise-Delivery-App/actions/workflows/codeql.yml)
-[![CodeQL Latest PR](https://github.com/LGugs3/Surprise-Delivery-App/actions/workflows/codeql.yml/badge.svg?event=pull_request)](https://github.com/LGugs3/Surprise-Delivery-App/actions/workflows/codeql.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/LGugs3/Surprise-Delivery-App/codeql.yml?event=schedule&label=Schedule%20CodeQL)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/LGugs3/Surprise-Delivery-App/codeql.yml?event=pull_request&label=Latest%20CodeQL%20PR)
 
 ## Tests
-[![Scheduled Tests](https://github.com/LGugs3/Surprise-Delivery-App/actions/workflows/flutterTests.yml/badge.svg?event=schedule)](https://github.com/LGugs3/Surprise-Delivery-App/actions/workflows/flutterTests.yml)
-[![Tests on Latest PR](https://github.com/LGugs3/Surprise-Delivery-App/actions/workflows/flutterTests.yml/badge.svg?event=pull_request)](https://github.com/LGugs3/Surprise-Delivery-App/actions/workflows/flutterTests.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/LGugs3/Surprise-Delivery-App/flutterTests.yml?event=schedule&label=Scheduled%20Tests)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/LGugs3/Surprise-Delivery-App/flutterTests.yml?event=pull_request&label=Latest%20PR%20Test)
 
 ## Secrets
 [![Find ENV](https://github.com/LGugs3/Surprise-Delivery-App/actions/workflows/findEnv.yml/badge.svg)](https://github.com/LGugs3/Surprise-Delivery-App/actions/workflows/findEnv.yml)
