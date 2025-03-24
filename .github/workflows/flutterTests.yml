@@ -4,6 +4,7 @@ on:
   pull_request:
   schedule:
     - cron: '0 5 * * 3'
+  merge_group:
 
 env:
   env_file: secrets.FIREBASE_AUTH
