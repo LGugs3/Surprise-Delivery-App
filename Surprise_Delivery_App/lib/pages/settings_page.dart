@@ -24,11 +24,7 @@ class SettingsPage extends StatelessWidget {
               child: const Text("Update Preferences"),
               onPressed: () {
                 // ignore: avoid_print
-                print("Change Preferences button pressed.");
-<<<<<<< HEAD
                 print("Update Food Preferences button pressed.");
-=======
->>>>>>> a33f99f40ae32266062f0c80518f7066b1004749
               },
             ),
             // Reset Password Button (Sends to reset password Page)
