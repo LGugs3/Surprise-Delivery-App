@@ -83,6 +83,7 @@ class _OrderFormState extends State<OrderForm> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMeal,
+        key: Key("add-meal-button"),
         // ignore: sort_child_properties_last
         child: Icon(Icons.add),
         backgroundColor: Colors.orange.shade400,
@@ -100,6 +101,7 @@ class _OrderFormState extends State<OrderForm> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.pink.shade200, width: 2),
       ),
+      key: Key("meal-container"),
       child: Column(
         children: <Widget>[
           Text(
@@ -147,6 +149,7 @@ class _OrderFormState extends State<OrderForm> {
     return Row(
       children: <Widget>[
         IconButton(
+          key: Key("dec-$mealType-acc"),
           icon: Icon(Icons.remove, color: Colors.orange.shade400),
           onPressed: () {
             setState(() {
@@ -157,8 +160,10 @@ class _OrderFormState extends State<OrderForm> {
         Text(
           "${meal.getCounter(mealType)}",
           style: GoogleFonts.lilitaOne(fontSize: 20),
+          key: Key("$mealType-acc-num"),
         ),
         IconButton(
+          key: Key("inc-$mealType-acc"),
           icon: Icon(Icons.add, color: Colors.orange.shade400),
           onPressed: () {
             setState(() {

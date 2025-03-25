@@ -13,7 +13,7 @@ Image logoWidget(String imageName) {
 TextField reusableTextField(String text, IconData icon, bool isPasswordType,
     TextEditingController controller,
     {TextInputAction textInputAction = TextInputAction.next, // Default action
-      Function(String)? onSubmitted,
+      Function(String)? onSubmitted, Key? givenKey
     }) {
   return TextField(
     controller: controller,
@@ -37,15 +37,17 @@ TextField reusableTextField(String text, IconData icon, bool isPasswordType,
     ),
     keyboardType:
     isPasswordType ? TextInputType.visiblePassword : TextInputType.emailAddress,
+    key: givenKey,
   );
 }
 
-Container firebaseUIButton(BuildContext context, String title, Function onTap) {
+Container firebaseUIButton(BuildContext context, String title, Function onTap, {Key? givenKey}) {
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 50,
     margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
     decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
+    key: givenKey,
     child: ElevatedButton(
       onPressed: () {
         onTap();

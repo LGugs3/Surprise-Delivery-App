@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/reset_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,11 @@ import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+
+  String getFirebaseUID()
+  {
+    return Firebase.apps.isEmpty ? "Unknown" : FirebaseAuth.instance.currentUser?.uid ?? "Unknown";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +27,7 @@ class SettingsPage extends StatelessWidget {
           children: [
             // Update preferences button
             ElevatedButton(
+              key: Key("update-preferences-button"),
               child: const Text("Update Preferences"),
               onPressed: () {
                 // ignore: avoid_print
@@ -30,6 +37,7 @@ class SettingsPage extends StatelessWidget {
             // Reset Password Button (Sends to reset password Page)
             const SizedBox(height: 20), // Adds spacing between buttons
             ElevatedButton(
+              key: Key("reset-password-settings"),
               child: const Text(
                 "Reset Password",
                 style: TextStyle(color: Colors.red),
@@ -43,6 +51,7 @@ class SettingsPage extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
+              key: Key("second-order-form-button"),
               child: ElevatedButton(
                 child: const Text("Second Order Form Page"),
                 onPressed: () {
@@ -59,7 +68,7 @@ class SettingsPage extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(10),
                 child: Text(
-                  'User ID: ${FirebaseAuth.instance.currentUser?.uid ?? 'Unknown'}',
+                  'User ID: ${getFirebaseUID()}',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
