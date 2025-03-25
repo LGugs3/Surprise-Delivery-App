@@ -10,8 +10,8 @@ import 'navigation.dart' as nav_test;
 
 //firebase doesn't like being used for testing so can't use sign in until i learn a lot more about mockito
 void main() {
-  std_test.main();
   nav_test.main();
+  std_test.main();
   // Tap the '+' icon and trigger a frame.
   //tester.ensureVisible(finder);
   //await tester.tap(find.byIcon(Icons.add));

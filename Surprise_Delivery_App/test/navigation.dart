@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:surpirse_delivery_app/pages/base_map.dart';
 import 'package:surpirse_delivery_app/pages/home_page.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
+import 'finder_widgets.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 class FakeRoute extends Fake implements Route {}
@@ -13,8 +13,8 @@ void main() {
     registerFallbackValue(FakeRoute());
   });
 
-  group("Navigate to View Map", () {
-    testWidgets("Navigation", (WidgetTester tester) async {
+  group("Navigations", () {
+    testWidgets("Nav to Base Map", (WidgetTester tester) async {
       final mockObserver = MockNavigatorObserver();
       await tester.pumpWidget(
         MaterialApp(
@@ -23,8 +23,6 @@ void main() {
         ),
       );
 
-      Finder viewMapButton = find.byKey(Key("View Map"));
-      Finder mapState = find.byType(BaseMap);
       expect(viewMapButton, findsOneWidget);
       tester.ensureVisible(viewMapButton);
       await tester.tap(viewMapButton);
@@ -34,10 +32,8 @@ void main() {
       expect(mapState, findsOneWidget);
 
     });
-  });
 
-  group("Navigate to Settings Page", () {
-    testWidgets("Navigate", (WidgetTester tester) async {
+    testWidgets("Nav to Settings", (WidgetTester tester) async {
       final mockObserver = MockNavigatorObserver();
       await tester.pumpWidget(
         MaterialApp(
@@ -46,8 +42,7 @@ void main() {
         ),
       );
 
-      Finder settingsButton = find.byKey(Key("Settings Button"));
-      Finder settingsState = find.byType(SettingsPage);
+
       expect(settingsButton, findsOneWidget);
 
       tester.ensureVisible(settingsButton);
@@ -57,6 +52,61 @@ void main() {
       verify(() => mockObserver.didPush(any(), any()));
       expect(settingsState, findsOneWidget);
     });
+
+    /*
+    //error thrown saying the page was too long to be rendered
+    testWidgets("Nav to Second Order Page", (WidgetTester tester) async {
+      final mockObserver = MockNavigatorObserver();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SettingsPage(),
+          navigatorObservers: [mockObserver],
+        ),
+      );
+
+      tester.ensureVisible(secondOrderFormButton);
+      await tester.tap(secondOrderFormButton);
+      await tester.pumpAndSettle();
+
+      verify(() => mockObserver.didPush(any(), any()));
+      expect(secondOrderState, findsOneWidget);
+    });
+    */
+
+    testWidgets("Navigate to Reset Password from Settings", (WidgetTester tester) async {
+      final mockObserver = MockNavigatorObserver();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SettingsPage(),
+          navigatorObservers: [mockObserver],
+        ),
+      );
+
+      tester.ensureVisible(resetPassSettingsButton);
+      await tester.tap(resetPassSettingsButton);
+      await tester.pumpAndSettle();
+
+      verify(() => mockObserver.didPush(any(), any()));
+      expect(resetPasswordState, findsOneWidget);
+    });
+
+    testWidgets("Nav to Order Form", (WidgetTester tester) async {
+      final mockObserver = MockNavigatorObserver();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: HomePage(),
+          navigatorObservers: [mockObserver],
+        ),
+      );
+
+      tester.ensureVisible(placeOrderButton);
+      await tester.tap(placeOrderButton);
+      await tester.pumpAndSettle();
+
+      verify(() => mockObserver.didPush(any(), any()));
+      expect(orderState, findsOneWidget);
+    });
   });
+
   //navigate to pages in settings page
 }

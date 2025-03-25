@@ -1,26 +1,21 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 //import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:surpirse_delivery_app/pages/base_map.dart';
 import 'package:surpirse_delivery_app/pages/home_page.dart';
+import 'package:surpirse_delivery_app/pages/order_form.dart';
+import 'package:surpirse_delivery_app/pages/settings_page.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
+import 'finder_widgets.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
-  //sign-in widgets
-  Finder emailInput = find.byKey(Key("Email Input"));
-  Finder passInput = find.byKey(Key("Password Input"));
-  Finder submitButton = find.byKey(Key("Login Submit"));
-
-  //home page widgets
-  Finder viewMapButton = find.byKey(Key("View Map"));
-  Finder placeOrderButton = find.byKey(Key("home-page-order"));
-  Finder settingsButton = find.byKey(Key("Settings Button"));
-  Finder homeLogoutButton = find.byKey(Key("home-logout-button"));
-
   group("Login Page", (){
+    //test sign up and forgot password
     testWidgets('Verify Widgets Exist', (WidgetTester tester) async {
       final mockObserver = MockNavigatorObserver();
       await tester.pumpWidget(
@@ -90,9 +85,105 @@ void main() {
     });
   });
 
-  group("Settings Page", () {
-    //reset password
-    //second order page
-    //update preferences
+  group("Order Form", () {
+    testWidgets("Verify Widgets Exist", (WidgetTester tester) async {
+      final mockObserver = MockNavigatorObserver();
+      await tester.pumpWidget(
+          MaterialApp(
+            home: const OrderForm(),
+            navigatorObservers: [mockObserver],
+          )
+      );
+
+      //Containers
+      expect(find.text("Help Us Pick!"), findsExactly(2));
+      expect(addMealButton, findsOneWidget);
+      expect(mealContainer, findsOneWidget);
+
+      //Widgets inside container
+      for (final entree in entreeTypes)
+        {
+          expect(getMealContainerAcc(entree, true), findsOneWidget);
+          expect(getMealContainerAcc(entree, false), findsOneWidget);
+          expect(getMealContainerCount(entree), findsOneWidget);
+        }
+    });
+
+    testWidgets("Add More Meals", (WidgetTester tester) async {
+      final mockObserver = MockNavigatorObserver();
+      await tester.pumpWidget(
+          MaterialApp(
+            home: const OrderForm(),
+            navigatorObservers: [mockObserver],
+          )
+      );
+
+      //add another meal
+      tester.ensureVisible(addMealButton);
+      await tester.tap(addMealButton);
+      await tester.pump();
+
+      //check for new meal container
+      expect(mealContainer, findsExactly(2));
+    });
+
+    testWidgets("Add Different Entree Counts", (WidgetTester tester) async {
+      final mockObserver = MockNavigatorObserver();
+      await tester.pumpWidget(
+          MaterialApp(
+            home: const OrderForm(),
+            navigatorObservers: [mockObserver],
+          )
+      );
+
+      for (final entree in entreeTypes)
+      {
+        Finder entreeInc = getMealContainerAcc(entree, true);
+        Finder entreeDec = getMealContainerAcc(entree, false);
+        Finder entreeCount = getMealContainerCount(entree);
+        Text counterWidget;
+
+        int incRng = Random().nextInt(11);
+        int decRng = Random().nextInt(11);
+
+        tester.ensureVisible(entreeInc);
+        //increment random number of times
+        for (int acc = 0; acc < incRng; acc++)
+        {
+          await tester.tap(entreeInc);
+          await tester.pump();
+        }
+        counterWidget = entreeCount.evaluate().single.widget as Text;
+        expect(counterWidget.data, incRng.toString());
+
+        //dec random number of times
+        tester.ensureVisible(entreeDec);
+        for (int acc = 0; acc < decRng; acc++)
+        {
+          await tester.tap(entreeDec);
+          await tester.pump();
+        }
+        counterWidget = entreeCount.evaluate().single.widget as Text;
+        expect(counterWidget.data, (incRng - decRng).clamp(0, 10).toString());
+      }
+    });
   });
+
+  group("Settings Page", () {
+    testWidgets("Verify Widgets Exist", (WidgetTester tester) async {
+      final mockObserver = MockNavigatorObserver();
+      await tester.pumpWidget(
+          MaterialApp(
+            home: const SettingsPage(),
+            navigatorObservers: [mockObserver],
+          )
+      );
+
+      expect(updatePreferencesButton, findsOneWidget);
+      expect(resetPassSettingsButton, findsOneWidget);
+      expect(secondOrderFormButton, findsOneWidget);
+    });
+  });
+
+  //cannot do second order page until fix render issue
 }

@@ -215,7 +215,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
         ),
         centerTitle: true,
         // ignore: deprecated_member_use
-        backgroundColor: const Color.fromARGB(255, 249, 160, 34).withOpacity(0.5),
+        backgroundColor: const Color.fromARGB(127, 249, 160, 34),
       ),
       body: Container(
         decoration: BoxDecoration(

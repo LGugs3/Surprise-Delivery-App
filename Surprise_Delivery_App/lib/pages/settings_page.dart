@@ -27,6 +27,7 @@ class SettingsPage extends StatelessWidget {
           children: [
             // Update preferences button
             ElevatedButton(
+              key: Key("update-preferences-button"),
               child: const Text("Update Preferences"),
               onPressed: () {
                 // ignore: avoid_print
@@ -36,6 +37,7 @@ class SettingsPage extends StatelessWidget {
             // Reset Password Button (Sends to reset password Page)
             const SizedBox(height: 20), // Adds spacing between buttons
             ElevatedButton(
+              key: Key("reset-password-settings"),
               child: const Text(
                 "Reset Password",
                 style: TextStyle(color: Colors.red),
@@ -49,6 +51,7 @@ class SettingsPage extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
+              key: Key("second-order-form-button"),
               child: ElevatedButton(
                 child: const Text("Second Order Form Page"),
                 onPressed: () {
