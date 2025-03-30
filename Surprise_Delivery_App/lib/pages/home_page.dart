@@ -1,11 +1,14 @@
 // ignore_for_file: use_super_parameters, avoid_print
 
+import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
 import 'package:surpirse_delivery_app/pages/order_form.dart';
 import 'package:surpirse_delivery_app/pages/base_map.dart';
+import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
+import 'package:confetti/confetti.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,8 +25,7 @@ Row buttonRow(BuildContext context) {
         children: <Widget>[
           ElevatedButton(
             key: Key("home-page-order"),
-            child:
-            const Text("Place Order"),
+            child: const Text("Place Order"),
             onPressed: () {
               Navigator.push(
                 context,
@@ -37,12 +39,11 @@ Row buttonRow(BuildContext context) {
         children: <Widget>[
           ElevatedButton(
             key: Key("View Map"),
-            child:
-            const Text("View Map"),
+            child: const Text("View Map"),
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BaseMap()),
+                context,
+                MaterialPageRoute(builder: (context) => BaseMap()),
               );
             },
           )
@@ -67,6 +68,34 @@ Row buttonRow(BuildContext context) {
 }
 
 class _HomePageState extends State<HomePage> {
+  late ConfettiController _centerController;
+  final List<String> cuisineOptions = [
+    'Fast Food',
+    'Japanese',
+    'Chinese',
+    'Thai',
+    'Italian',
+    'Mexican',
+    'Indian',
+    'French',
+    'Pub/Bar'
+  ];
+
+  String selectedCuisine = "";
+  bool flag = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _centerController = ConfettiController(duration: const Duration(seconds: 10));
+  }
+
+  @override
+  void dispose() {
+    _centerController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +119,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Container(
-        // Add the gradient as the background
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -105,14 +133,97 @@ class _HomePageState extends State<HomePage> {
         child: Center(
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
-            child: buttonRow(context),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                buttonRow(context),
+                SizedBox(height: 50), // Add space between buttons and the wheel
+                // Fortune Wheel integration
+                GestureDetector(
+                  onTap: () {
+                    // Placeholder for wheel spin logic
+                    setState(() {
+                      // Trigger the wheel spin
+                    });
+                  },
+                  child: SizedBox(
+                    height: 400,
+                    child: FortuneWheel(
+                      selected: Stream.value(0), // Modify for actual logic
+                      items: [
+                        for (var it in cuisineOptions) FortuneItem(child: Text(it)),
+                      ],
+                      onAnimationEnd: () {
+                        _centerController.play();
+                        showDialog(
+                          barrierDismissible: true,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return AlertDialog(
+                                  scrollable: true,
+                                  title: Text("Hurray! Today's cuisine is????"),
+                                  content: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topRight,
+                                        child: SizedBox(
+                                          width: 300,
+                                          height: 300,
+                                          child: Center(
+                                            child: ConfettiWidget(
+                                              confettiController: _centerController,
+                                              blastDirection: pi,
+                                              maxBlastForce: 10,
+                                              minBlastForce: 1,
+                                              emissionFrequency: 0.03,
+                                              numberOfParticles: 100,
+                                              gravity: 0,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            selectedCuisine,
+                                            style: TextStyle(fontSize: 22),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      onFocusItemChanged: (value) {
+                        if (flag == true) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            setState(() {
+                              selectedCuisine = cuisineOptions[value];
+                            });
+                          });
+                        } else {
+                          flag = true;
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  // Helper function to convert hex string to Color
   Color hexStringToColor(String hex) {
     final buffer = StringBuffer();
     if (hex.length == 6 || hex.length == 7) {
