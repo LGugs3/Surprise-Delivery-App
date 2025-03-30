@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
+import 'package:surpirse_delivery_app/utils/color_utils.dart';
 
 class OrderForm extends StatefulWidget {
   const OrderForm({super.key});
@@ -33,7 +35,7 @@ class _OrderFormState extends State<OrderForm> {
   ];
 
   // List to store meal data
-  List<Meal> _meals = [Meal()];
+  final List<Meal> _meals = [Meal()];
 
   // Function to add a new meal
   void _addMeal() {
@@ -45,6 +47,7 @@ class _OrderFormState extends State<OrderForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange.shade200,
       appBar: AppBar(
         title: Stack(
           children: [
@@ -71,22 +74,65 @@ class _OrderFormState extends State<OrderForm> {
         backgroundColor:
             const Color.fromARGB(255, 239, 214, 29).withValues(alpha: 0.5),
       ),
-      body: Container(
-        padding: EdgeInsets.all(8.0),
-        color: Colors.orange.shade200,
-        child: ListView.builder(
-          itemCount: _meals.length,
-          itemBuilder: (context, index) {
-            return _buildMealElement(_meals[index], index);
-          },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addMeal,
-        key: Key("add-meal-button"),
-        // ignore: sort_child_properties_last
-        child: Icon(Icons.add),
-        backgroundColor: Colors.orange.shade400,
+      body: Column(
+        children: [
+          // List of meals inside Expanded widget
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    hexStringToColor("2ec7a3"),
+                    hexStringToColor("12e0b0"),
+                    hexStringToColor("0fb5ec")
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: ListView.builder(
+                itemCount: _meals.length + 1, // Extra 1 for the Add Meal button
+                itemBuilder: (context, index) {
+                  if (index < _meals.length) {
+                    return _buildMealElement(_meals[index], index);
+                  } else {
+                    // Add Meal button at the bottom of the list
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: FloatingActionButton(
+                        onPressed: _addMeal,
+                        key: Key("add-meal-button"),
+                        backgroundColor: Colors.orange.shade400,
+                        child: Icon(Icons.add),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              key: Key("second-page-order"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SecondOrderPage()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange.shade400, // Button color
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+              ),
+              child: const Text(
+                "Continue Selection",
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
