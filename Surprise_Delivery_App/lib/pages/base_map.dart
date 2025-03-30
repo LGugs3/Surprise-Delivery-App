@@ -11,6 +11,7 @@ class BaseMap extends StatefulWidget {
 class _BaseMapState extends State<BaseMap> {
   late GoogleMapController mapController;
 
+  //coords are at burlington, vt
   final LatLng _startPos = const LatLng(44.475883, -73.212074);
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -27,6 +28,15 @@ class _BaseMapState extends State<BaseMap> {
         appBar: AppBar(
           title: const Text("Base Map"),
           elevation: 2,
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.black54,
+            ),
+          )
         ),
         body: GoogleMap(
           onMapCreated: _onMapCreated,
