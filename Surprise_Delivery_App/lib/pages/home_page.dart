@@ -1,6 +1,7 @@
 // ignore_for_file: use_super_parameters, avoid_print
 
 import 'dart:math';
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+// the buttons for homepage are here
 Row buttonRow(BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -69,6 +71,8 @@ Row buttonRow(BuildContext context) {
 
 class _HomePageState extends State<HomePage> {
   late ConfettiController _centerController;
+  final StreamController<int> controller = StreamController<int>.broadcast(); // Use broadcast
+
   final List<String> cuisineOptions = [
     'Fast Food',
     'Japanese',
@@ -83,6 +87,8 @@ class _HomePageState extends State<HomePage> {
 
   String selectedCuisine = "";
   bool flag = false;
+  // variable to control the selected item 
+  int selectedItem = 0; 
 
   @override
   void initState() {
@@ -93,7 +99,17 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _centerController.dispose();
+    controller.close();
     super.dispose();
+  }
+
+  void spinWheel() {
+    setState(() {
+      // random selection
+      selectedItem = Random().nextInt(cuisineOptions.length); 
+    });
+    // makes the wheel spin
+    controller.add(selectedItem);
   }
 
   @override
@@ -118,41 +134,55 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              hexStringToColor("2ec7a3"),
-              hexStringToColor("12e0b0"),
-              hexStringToColor("0fb5ec"),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+      // wrapped the body into scroll view
+      body: SingleChildScrollView( 
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                hexStringToColor("2ec7a3"),
+                hexStringToColor("12e0b0"),
+                hexStringToColor("0fb5ec"),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
-        ),
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buttonRow(context),
-                SizedBox(height: 50), // Add space between buttons and the wheel
-                // Fortune Wheel integration
-                GestureDetector(
-                  onTap: () {
-                    // Placeholder for wheel spin logic
-                    setState(() {
-                      // Trigger the wheel spin
-                    });
-                  },
-                  child: SizedBox(
+          child: Center(
+            child: Padding(
+              // adjust the padding here
+              padding: EdgeInsets.fromLTRB(0, 50, 0, 210), 
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buttonRow(context),
+                   // the space between buttons and the wheel
+                  SizedBox(height: 200),
+
+                  // fortune wheel integration
+                  SizedBox(
                     height: 400,
                     child: FortuneWheel(
-                      selected: Stream.value(0), // Modify for actual logic
+                      // this stream triggers the spin
+                      selected: controller.stream, 
                       items: [
-                        for (var it in cuisineOptions) FortuneItem(child: Text(it)),
+                        for (int i = 0; i < cuisineOptions.length; i++)
+                          FortuneItem(
+                            child: Text(
+                              cuisineOptions[i],
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
+                            style: FortuneItemStyle(
+                              // unique color randomly
+                              color: getWheelColor(i), 
+                              // border color
+                              borderColor: Colors.white, 
+                              // border thickness
+                              borderWidth: 3, 
+                            ),
+                          ),
                       ],
+                      // the animation pop-up after wheel ends
                       onAnimationEnd: () {
                         _centerController.play();
                         showDialog(
@@ -215,13 +245,35 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   ),
-                ),
-              ],
+                  // button below wheel
+                  ElevatedButton(
+                    onPressed: spinWheel,
+                    child: Text("Spin the Wheel!"),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  // these are the assigned colors for the wheel
+  Color getWheelColor(int index) {
+    List<Color> wheelColors = [
+      Colors.redAccent,
+      Colors.orangeAccent,
+      Colors.yellowAccent,
+      Colors.greenAccent,
+      Colors.blueAccent,
+      Colors.purpleAccent,
+      Colors.pinkAccent,
+      Colors.tealAccent,
+      Colors.brown
+    ];
+    // loops through colors
+    return wheelColors[index % wheelColors.length]; 
   }
 
   Color hexStringToColor(String hex) {
