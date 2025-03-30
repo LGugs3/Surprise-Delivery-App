@@ -1,38 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
-import 'package:surpirse_delivery_app/pages/payment_page.dart';
+import 'package:surpirse_delivery_app/pages/home_page.dart';
 
-class SecondOrderPage extends StatefulWidget {
-  const SecondOrderPage({super.key});
+class Payment extends StatefulWidget {
+  const Payment({super.key});
 
   @override
-  State<SecondOrderPage> createState() => _SecondOrderPageState();
+  State<Payment> createState() => _PaymentState();
 }
 
-class _SecondOrderPageState extends State<SecondOrderPage> {
-  // List of available cuisines
-  final List<String> cuisineOptions = [
-    'Fast Food',
-    'Japanese',
-    'Chinese',
-    'Thai',
-    'Italian',
-    'Mexican',
-    'Indian',
-    'French',
-    'Pub/Bar',
-    'Fully Random'
-  ];
-
-  // Controllers for address inputs
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _stateController = TextEditingController();
+class _PaymentState extends State<Payment> {
+  // Controllers for card details
+  final TextEditingController _cardNumberController = TextEditingController();
+  final TextEditingController _expirationController = TextEditingController();
+  final TextEditingController _cvcController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
   final TextEditingController _zipCodeController = TextEditingController();
 
-  // Selected cuisine
-  String? _selectedCuisine;
+  double _paymentAmount = 20.0;
 
   @override
   Widget build(BuildContext context) {
@@ -70,46 +56,34 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Cuisine Dropdown
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  "Select Cuisine Type:",
+                  "Payment Amount: \$${_paymentAmount.toStringAsFixed(2)}",
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.orange.shade400, width: 2),
-                ),
-                child: DropdownButton<String>(
-                  value: _selectedCuisine,
-                  hint: Text('Choose a cuisine'),
-                  isExpanded: true,
-                  items: cuisineOptions.map((cuisine) {
-                    return DropdownMenuItem<String>(
-                      value: cuisine,
-                      child: Text(cuisine, style: TextStyle(fontSize: 18)),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedCuisine = newValue;
-                    });
-                  },
-                ),
+              Slider(
+                value: _paymentAmount,
+                min: 20.0,
+                max: 100.0,
+                divisions: 8,
+                onChanged: (double newValue) {
+                  setState(() {
+                    _paymentAmount = newValue;
+                  });
+                },
+                activeColor: Colors.orange.shade400,
+                inactiveColor: const Color.fromARGB(255, 238, 234, 234),
+                thumbColor: Colors.orange.shade400,
               ),
 
               SizedBox(height: 20),
 
-              // Address Input Field
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  "Enter Your Delivery Address:",
+                  "Card Number:",
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -121,9 +95,9 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
-                  controller: _addressController,
+                  controller: _cardNumberController,
                   decoration: InputDecoration(
-                    hintText: 'Enter your address...',
+                    hintText: 'XXXX XXXX XXXX XXXX',
                     border: InputBorder.none,
                   ),
                   style: TextStyle(fontSize: 18),
@@ -136,7 +110,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  "Enter Your City:",
+                  "Expiration:",
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -148,9 +122,9 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
-                  controller: _cityController,
+                  controller: _expirationController,
                   decoration: InputDecoration(
-                    hintText: 'Enter your city...',
+                    hintText: 'MM/YY',
                     border: InputBorder.none,
                   ),
                   style: TextStyle(fontSize: 18),
@@ -163,7 +137,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  "Enter Your State:",
+                  "CVC:",
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -175,9 +149,36 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
-                  controller: _stateController,
+                  controller: _cvcController,
                   decoration: InputDecoration(
-                    hintText: 'Enter your state...',
+                    hintText: 'CVC',
+                    border: InputBorder.none,
+                  ),
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+
+              SizedBox(height: 20),
+
+              // State Input Field
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  "Country:",
+                  style: GoogleFonts.lilitaOne(fontSize: 22),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.orange.shade400, width: 2),
+                ),
+                child: TextField(
+                  controller: _countryController,
+                  decoration: InputDecoration(
+                    hintText: 'Country',
                     border: InputBorder.none,
                   ),
                   style: TextStyle(fontSize: 18),
@@ -218,16 +219,16 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     // Handle order submission logic
-                    String selectedCuisine =
-                        _selectedCuisine ?? 'No cuisine selected';
-                    String deliveryAddress = _addressController.text;
-                    String city = _cityController.text;
-                    String state = _stateController.text;
+                    String cardNumber = _cardNumberController.text;
+                    String expiration = _expirationController.text;
+                    String cvc = _cvcController.text;
+                    String country = _countryController.text;
                     String zipCode = _zipCodeController.text;
 
-                    if (deliveryAddress.isEmpty ||
-                        city.isEmpty ||
-                        state.isEmpty ||
+                    if (cardNumber.isEmpty ||
+                        expiration.isEmpty ||
+                        cvc.isEmpty ||
+                        country.isEmpty ||
                         zipCode.isEmpty) {
                       // Show error if any of the fields are empty
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -237,7 +238,9 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                       // Handle the order submission logic
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Payment()),
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HomePage()), // will be changed to some sort of order processing/delivery page
                       );
                     }
                   },
@@ -246,7 +249,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   ),
                   child: Text(
-                    "Continue To Payment",
+                    "Complete Order",
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
