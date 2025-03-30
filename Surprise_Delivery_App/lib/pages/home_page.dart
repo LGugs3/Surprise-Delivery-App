@@ -71,10 +71,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: Key("HomePage Widget"),
-      backgroundColor: Colors.blue,
       appBar: AppBar(
         title: const Text("UPick"),
-        backgroundColor: Colors.amber,
+        backgroundColor: const Color.fromARGB(255, 239, 214, 29).withOpacity(0.5),
         actions: [
           IconButton(
             key: Key("home-logout-button"),
@@ -90,12 +89,36 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
-          child: buttonRow(context),
+      body: Container(
+        // Add the gradient as the background
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              hexStringToColor("2ec7a3"),
+              hexStringToColor("12e0b0"),
+              hexStringToColor("0fb5ec"),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, 50, 0, 50),
+            child: buttonRow(context),
+          ),
         ),
       ),
     );
+  }
+
+  // Helper function to convert hex string to Color
+  Color hexStringToColor(String hex) {
+    final buffer = StringBuffer();
+    if (hex.length == 6 || hex.length == 7) {
+      buffer.write('ff');
+    }
+    buffer.write(hex.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
   }
 }
