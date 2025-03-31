@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
       key: Key("HomePage Widget"),
       appBar: AppBar(
         title: const Text("UPick"),
-        backgroundColor: const Color.fromARGB(255, 239, 214, 29).withOpacity(0.5),
+        backgroundColor: const Color.fromARGB(127, 239, 214, 29),
         actions: [
           IconButton(
             key: Key("home-logout-button"),

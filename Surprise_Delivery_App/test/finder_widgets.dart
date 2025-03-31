@@ -6,6 +6,9 @@ import 'package:surpirse_delivery_app/pages/reset_password.dart';
 import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
 
+//pump duration
+const Duration settleTime = Duration(seconds: 1);
+
 //sign-in widgets
 Finder emailInput = find.byKey(Key("Email Input"));
 Finder passInput = find.byKey(Key("Password Input"));
