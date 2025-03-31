@@ -1,6 +1,16 @@
-# UPick: A surprise delivery app (By Liam, Adrian, Genesis, Matt and Jess)
-## To be written with Android Studio
-## Created my branch!
+
+██╗░░░██╗██████╗░██╗░█████╗░██╗░░██╗
+██║░░░██║██╔══██╗██║██╔══██╗██║░██╔╝
+██║░░░██║██████╔╝██║██║░░╚═╝█████═╝░
+██║░░░██║██╔═══╝░██║██║░░██╗██╔═██╗░
+╚██████╔╝██║░░░░░██║╚█████╔╝██║░╚██╗
+░╚═════╝░╚═╝░░░░░╚═╝░╚════╝░╚═╝░░╚═╝
+
+# By: Liam, Jess, Genesis, Matt and Adrian
+
+
+#### UPick is a surprise delivery app that lets users order a completely random meal combination. No spoilers, no decisions, just pure surprise. By integrating with modern delivery service APIs, UPick automates the food ordering process while keeping the final meal a mystery until it arrives at your door. It’s a fun, spontaneous way to try something new, whether you're feeling adventurous or just indecisive. Say goodbye to the "What should I eat?" dilemma. U Pick, and let fate decide.
+
 
 
 
