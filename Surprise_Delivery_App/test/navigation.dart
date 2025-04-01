@@ -26,7 +26,8 @@ void main() {
       expect(viewMapButton, findsOneWidget);
       tester.ensureVisible(viewMapButton);
       await tester.tap(viewMapButton);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(settleTime);
 
       verify(() => mockObserver.didPush(any(), any()));
       expect(mapState, findsOneWidget);
@@ -47,7 +48,8 @@ void main() {
 
       tester.ensureVisible(settingsButton);
       await tester.tap(settingsButton);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(settleTime);
 
       verify(() => mockObserver.didPush(any(), any()));
       expect(settingsState, findsOneWidget);
@@ -84,7 +86,8 @@ void main() {
 
       tester.ensureVisible(resetPassSettingsButton);
       await tester.tap(resetPassSettingsButton);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(settleTime);
 
       verify(() => mockObserver.didPush(any(), any()));
       expect(resetPasswordState, findsOneWidget);
@@ -101,7 +104,8 @@ void main() {
 
       tester.ensureVisible(placeOrderButton);
       await tester.tap(placeOrderButton);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(settleTime);
 
       verify(() => mockObserver.didPush(any(), any()));
       expect(orderState, findsOneWidget);

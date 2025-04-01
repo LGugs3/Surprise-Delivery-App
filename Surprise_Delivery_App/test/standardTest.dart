@@ -79,7 +79,8 @@ void main() {
 
       tester.ensureVisible(viewMapButton);
       await tester.tap(viewMapButton);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(settleTime);
 
       expect(find.byType(BaseMap), findsOneWidget);
     });
