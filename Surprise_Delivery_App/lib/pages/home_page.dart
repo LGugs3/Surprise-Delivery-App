@@ -163,6 +163,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: 400,
                     child: FortuneWheel(
+                      key: Key("fortune-wheel"),
                       // this stream triggers the spin
                       selected: controller.stream, 
                       items: [
@@ -247,6 +248,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   // button below wheel
                   ElevatedButton(
+                    key: Key("spin-wheel-button"),
                     onPressed: spinWheel,
                     child: Text("Spin the Wheel!"),
                   ),

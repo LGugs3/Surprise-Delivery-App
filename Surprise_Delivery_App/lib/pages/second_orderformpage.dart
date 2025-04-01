@@ -75,6 +75,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   "Select Cuisine Type:",
+                  key: Key("cuisine-type-text-o2"),
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -86,6 +87,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: DropdownButton<String>(
+                  key: Key("cuisine-select-dropdown-o2"),
                   value: _selectedCuisine,
                   hint: Text('Choose a cuisine'),
                   isExpanded: true,
@@ -110,6 +112,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   "Enter Your Delivery Address:",
+                  key: Key("address-text-o2"),
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -121,6 +124,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
+                  key: Key("address-input-o2"),
                   controller: _addressController,
                   decoration: InputDecoration(
                     hintText: 'Enter your address...',
@@ -137,6 +141,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   "Enter Your City:",
+                  key: Key("city-text-o2"),
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -148,6 +153,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
+                  key: Key("city-input-o2"),
                   controller: _cityController,
                   decoration: InputDecoration(
                     hintText: 'Enter your city...',
@@ -164,6 +170,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   "Enter Your State:",
+                  key: Key("state-text-o2"),
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -175,6 +182,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
+                  key: Key("state-input-o2"),
                   controller: _stateController,
                   decoration: InputDecoration(
                     hintText: 'Enter your state...',
@@ -191,6 +199,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   "Enter Your Zip Code:",
+                  key: Key("zip-text-o2"),
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -202,6 +211,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
+                  key: Key("zip-input-o2"),
                   controller: _zipCodeController,
                   decoration: InputDecoration(
                     hintText: 'Enter your zip code...',
@@ -216,6 +226,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
               // Submit Button
               Center(
                 child: ElevatedButton(
+                  key: Key("continue-payment-button"),
                   onPressed: () {
                     // Handle order submission logic
                     String selectedCuisine =
