@@ -167,8 +167,54 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   buttonRow(context),
                   // the space between buttons and the wheel
-                  SizedBox(height: 200),
+                  SizedBox(height: 20),
 
+                  // Row with Uey and speech bubble
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Image.asset(
+                            'assets/images/Uey.png',
+                            width: 200,
+                            height: 200,
+                          ),
+                        ),
+                        Stack(
+                          children: [
+                            Transform.translate(
+                              offset: Offset(0, -40),
+                              child: Image.asset(
+                                'assets/images/speech_bubble.png',
+                                width: 150,
+                                height: 150,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              left: 40,
+                              child: Visibility(
+                                visible: selectedCuisine.isNotEmpty,
+                                child: Text(
+                                  'Uey picks\n$selectedCuisine',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 20),
                   // fortune wheel integration
                   SizedBox(
                     height: 400,
