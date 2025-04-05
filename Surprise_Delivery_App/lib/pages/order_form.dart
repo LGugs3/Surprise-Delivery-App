@@ -150,9 +150,23 @@ class _OrderFormState extends State<OrderForm> {
       key: Key("meal-container"),
       child: Column(
         children: <Widget>[
-          Text(
-            "Meal ${index + 1}",
-            style: GoogleFonts.lilitaOne(fontSize: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Meal ${index + 1}",
+                style: GoogleFonts.lilitaOne(fontSize: 20),
+              ),
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.black),
+                onPressed: () {
+                  // Remove the meal from the list
+                  setState(() {
+                    _meals.removeAt(index);
+                  });
+                },
+              ),
+            ],
           ),
           SizedBox(height: 10),
           _buildMealItem("Main", meal, "main", index),
