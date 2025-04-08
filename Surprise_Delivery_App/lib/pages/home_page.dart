@@ -3,6 +3,7 @@
 import 'dart:math';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
@@ -71,7 +72,8 @@ Row buttonRow(BuildContext context) {
 
 class _HomePageState extends State<HomePage> {
   late ConfettiController _centerController;
-  final StreamController<int> controller = StreamController<int>.broadcast(); // Use broadcast
+  final StreamController<int> controller =
+      StreamController<int>.broadcast(); // Use broadcast
 
   final List<String> cuisineOptions = [
     'Fast Food',
@@ -86,14 +88,27 @@ class _HomePageState extends State<HomePage> {
   ];
 
   String selectedCuisine = "";
-  bool flag = false;
-  // variable to control the selected item 
-  int selectedItem = 0; 
+  // variable to control the selected item
+  int selectedItem = 0;
+
+  void initWheelSpin()
+  {
+    setState(() {
+      selectedItem = Random().nextInt(cuisineOptions.length);
+      controller.add(selectedItem);
+    });
+  }
 
   @override
   void initState() {
+    _centerController =
+        ConfettiController(duration: const Duration(seconds: 10));
+
     super.initState();
-    _centerController = ConfettiController(duration: const Duration(seconds: 10));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initWheelSpin();
+    });
   }
 
   @override
@@ -106,7 +121,7 @@ class _HomePageState extends State<HomePage> {
   void spinWheel() {
     setState(() {
       // random selection
-      selectedItem = Random().nextInt(cuisineOptions.length); 
+      selectedItem = Random().nextInt(cuisineOptions.length);
     });
     // makes the wheel spin
     controller.add(selectedItem);
@@ -135,7 +150,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       // wrapped the body into scroll view
-      body: SingleChildScrollView( 
+      body: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -151,34 +166,83 @@ class _HomePageState extends State<HomePage> {
           child: Center(
             child: Padding(
               // adjust the padding here
-              padding: EdgeInsets.fromLTRB(0, 50, 0, 210), 
+              padding: EdgeInsets.fromLTRB(0, 50, 0, 210),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   buttonRow(context),
-                   // the space between buttons and the wheel
-                  SizedBox(height: 200),
+                  // the space between buttons and the wheel
+                  SizedBox(height: 20),
 
+                  // Row with Uey and speech bubble
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Image.asset(
+                            'assets/images/Uey.png',
+                            width: 200,
+                            height: 200,
+                          ),
+                        ),
+                        Stack(
+                          children: [
+                            Transform.translate(
+                              offset: Offset(0, -40),
+                              child: Image.asset(
+                                'assets/images/speech_bubble.png',
+                                width: 150,
+                                height: 150,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              left: 40,
+                              child: Visibility(
+                                visible: selectedCuisine.isNotEmpty,
+                                child: Text(
+                                  'Uey picks\n$selectedCuisine',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 20),
                   // fortune wheel integration
                   SizedBox(
                     height: 400,
                     child: FortuneWheel(
                       // this stream triggers the spin
-                      selected: controller.stream, 
+                      selected: controller.stream,
                       items: [
                         for (int i = 0; i < cuisineOptions.length; i++)
                           FortuneItem(
                             child: Text(
                               cuisineOptions[i],
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
                             style: FortuneItemStyle(
                               // unique color randomly
-                              color: getWheelColor(i), 
+                              color: getWheelColor(i),
                               // border color
-                              borderColor: Colors.white, 
+                              borderColor: Colors.white,
                               // border thickness
-                              borderWidth: 3, 
+                              borderWidth: 3,
                             ),
                           ),
                       ],
@@ -204,19 +268,22 @@ class _HomePageState extends State<HomePage> {
                                           height: 300,
                                           child: Center(
                                             child: ConfettiWidget(
-                                              confettiController: _centerController,
+                                              confettiController:
+                                                  _centerController,
                                               blastDirection: pi,
                                               maxBlastForce: 10,
                                               minBlastForce: 1,
                                               emissionFrequency: 0.03,
-                                              numberOfParticles: 100,
+                                              numberOfParticles: 50,
                                               gravity: 0,
+                                              shouldLoop: false,
                                             ),
                                           ),
                                         ),
                                       ),
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Text(
                                             selectedCuisine,
@@ -233,21 +300,20 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       onFocusItemChanged: (value) {
-                        if (flag == true) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            setState(() {
-                              selectedCuisine = cuisineOptions[value];
-                            });
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          setState(() {
+                            selectedCuisine = cuisineOptions[
+                                value]; // Update state after build
                           });
-                        } else {
-                          flag = true;
-                        }
+                        });
                       },
                     ),
                   ),
                   // button below wheel
                   ElevatedButton(
-                    onPressed: spinWheel,
+                    onPressed: () {
+                      spinWheel();
+                    },
                     child: Text("Spin the Wheel!"),
                   ),
                 ],
@@ -273,7 +339,7 @@ class _HomePageState extends State<HomePage> {
       Colors.brown
     ];
     // loops through colors
-    return wheelColors[index % wheelColors.length]; 
+    return wheelColors[index % wheelColors.length];
   }
 
   Color hexStringToColor(String hex) {
