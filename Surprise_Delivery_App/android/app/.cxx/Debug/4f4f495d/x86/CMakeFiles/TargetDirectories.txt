@@ -1,0 +1,2 @@
+C:/Users/duoli/Desktop/Surprise-Delivery-App/Surprise_Delivery_App/android/app/.cxx/Debug/4f4f495d/x86/CMakeFiles/edit_cache.dir
+C:/Users/duoli/Desktop/Surprise-Delivery-App/Surprise_Delivery_App/android/app/.cxx/Debug/4f4f495d/x86/CMakeFiles/rebuild_cache.dir
