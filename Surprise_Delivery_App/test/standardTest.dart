@@ -237,7 +237,8 @@ void main() {
         home: Payment(),
       ));
 
-      //key is x offset y is the slider value from the initial position
+      //key is x offset starting from the initial position(60); value is the slider value
+      //for some reason grabbing the slider automatically puts it in the middle, also cant get to 20
       final Map<double, double> sliderOffsets = {
         -250.0: 30.0,
         -150.0: 40.0,
