@@ -111,6 +111,7 @@ class _OrderFormState extends State<OrderForm> {
                       child: FloatingActionButton(
                         onPressed: _addMeal,
                         key: Key("add-meal-button"),
+                        heroTag: 'add-meal-hero-button',
                         backgroundColor: Colors.orange.shade400,
                         child: Icon(Icons.add),
                       ),
@@ -122,6 +123,7 @@ class _OrderFormState extends State<OrderForm> {
                       child: FloatingActionButton(
                         onPressed: _addKidsMeal,
                         key: Key("add-kids-meal-button"),
+                        heroTag: 'add-kids-meal-hero-button',
                         backgroundColor: Colors.orange.shade400,
                         child: Icon(Icons.child_care),
                       ),

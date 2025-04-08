@@ -3,6 +3,7 @@
 import 'dart:math';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
@@ -90,22 +91,26 @@ class _HomePageState extends State<HomePage> {
   // variable to control the selected item
   int selectedItem = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _centerController =
-        ConfettiController(duration: const Duration(seconds: 10));
-
-    // Adding  delay to ensure initial random value is set properly
-    Future.delayed(Duration(milliseconds: 100), () {
-      setState(() {
-        selectedItem = Random().nextInt(cuisineOptions.length);
-        controller.add(selectedItem);
-      });
+  void initWheelSpin()
+  {
+    setState(() {
+      selectedItem = Random().nextInt(cuisineOptions.length);
+      controller.add(selectedItem);
     });
   }
 
   @override
+  void initState() {
+    _centerController =
+        ConfettiController(duration: const Duration(seconds: 10));
+
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initWheelSpin();
+    });
+  }
+
   @override
   void dispose() {
     _centerController.dispose();
@@ -269,8 +274,9 @@ class _HomePageState extends State<HomePage> {
                                               maxBlastForce: 10,
                                               minBlastForce: 1,
                                               emissionFrequency: 0.03,
-                                              numberOfParticles: 100,
+                                              numberOfParticles: 50,
                                               gravity: 0,
+                                              shouldLoop: false,
                                             ),
                                           ),
                                         ),
