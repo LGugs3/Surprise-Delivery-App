@@ -21,57 +21,43 @@ class HomePage extends StatefulWidget {
 // the buttons for homepage are here
 Row buttonRow(BuildContext context) {
   return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: <Widget>[
-      Column(
-        children: <Widget>[
-          ElevatedButton(
-            key: Key("home-page-order"),
-            child: const Text("Place Order"),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => OrderForm()),
-              );
-            },
-          )
-        ],
-      ),
-      Column(
-        children: <Widget>[
-          ElevatedButton(
-            key: Key("View Map"),
-            child: const Text("View Map"),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BaseMap()),
-              );
-            },
-          )
-        ],
-      ),
-      Column(
-        children: <Widget>[
-          ElevatedButton(
-            key: Key("Settings Button"),
-            child: const Text("Settings"),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingsPage()),
-              );
-            },
-          )
-        ],
-      )
-    ],
-  );
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            ElevatedButton(
+              key: Key("home-page-order"),
+              child: const Text("Place Order"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OrderForm()),
+                );
+              },
+            )
+          ],
+        ),
+        Column(
+          children: <Widget>[
+            ElevatedButton(
+              key: Key("View Map"),
+              child: const Text("View Map"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BaseMap()),
+                );
+              },
+            )
+          ],
+        ),
+      ]);
 }
 
 class _HomePageState extends State<HomePage> {
   late ConfettiController _centerController;
-  final StreamController<int> controller = StreamController<int>.broadcast(); // Use broadcast
+  final StreamController<int> controller =
+      StreamController<int>.broadcast(); // Use broadcast
 
   final List<String> cuisineOptions = [
     'Fast Food',
@@ -87,13 +73,14 @@ class _HomePageState extends State<HomePage> {
 
   String selectedCuisine = "";
   bool flag = false;
-  // variable to control the selected item 
-  int selectedItem = 0; 
+  // variable to control the selected item
+  int selectedItem = 0;
 
   @override
   void initState() {
     super.initState();
-    _centerController = ConfettiController(duration: const Duration(seconds: 10));
+    _centerController =
+        ConfettiController(duration: const Duration(seconds: 10));
   }
 
   @override
@@ -106,7 +93,7 @@ class _HomePageState extends State<HomePage> {
   void spinWheel() {
     setState(() {
       // random selection
-      selectedItem = Random().nextInt(cuisineOptions.length); 
+      selectedItem = Random().nextInt(cuisineOptions.length);
     });
     // makes the wheel spin
     controller.add(selectedItem);
@@ -119,6 +106,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("UPick"),
         backgroundColor: const Color.fromARGB(127, 239, 214, 29),
+        leading: IconButton(
+          key: Key("home-settings-button"),
+          icon: const Icon(Icons.settings),
+          tooltip: 'Settings',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SettingsPage()),
+            );
+          },
+        ),
         actions: [
           IconButton(
             key: Key("home-logout-button"),
@@ -135,7 +133,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       // wrapped the body into scroll view
-      body: SingleChildScrollView( 
+      body: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -151,12 +149,12 @@ class _HomePageState extends State<HomePage> {
           child: Center(
             child: Padding(
               // adjust the padding here
-              padding: EdgeInsets.fromLTRB(0, 50, 0, 210), 
+              padding: EdgeInsets.fromLTRB(0, 50, 0, 210),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   buttonRow(context),
-                   // the space between buttons and the wheel
+                  // the space between buttons and the wheel
                   SizedBox(height: 200),
 
                   // fortune wheel integration
@@ -164,21 +162,24 @@ class _HomePageState extends State<HomePage> {
                     height: 400,
                     child: FortuneWheel(
                       // this stream triggers the spin
-                      selected: controller.stream, 
+                      selected: controller.stream,
                       items: [
                         for (int i = 0; i < cuisineOptions.length; i++)
                           FortuneItem(
                             child: Text(
                               cuisineOptions[i],
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                             ),
                             style: FortuneItemStyle(
                               // unique color randomly
-                              color: getWheelColor(i), 
+                              color: getWheelColor(i),
                               // border color
-                              borderColor: Colors.white, 
+                              borderColor: Colors.white,
                               // border thickness
-                              borderWidth: 3, 
+                              borderWidth: 3,
                             ),
                           ),
                       ],
@@ -204,7 +205,8 @@ class _HomePageState extends State<HomePage> {
                                           height: 300,
                                           child: Center(
                                             child: ConfettiWidget(
-                                              confettiController: _centerController,
+                                              confettiController:
+                                                  _centerController,
                                               blastDirection: pi,
                                               maxBlastForce: 10,
                                               minBlastForce: 1,
@@ -216,7 +218,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Text(
                                             selectedCuisine,
@@ -273,7 +276,7 @@ class _HomePageState extends State<HomePage> {
       Colors.brown
     ];
     // loops through colors
-    return wheelColors[index % wheelColors.length]; 
+    return wheelColors[index % wheelColors.length];
   }
 
   Color hexStringToColor(String hex) {
