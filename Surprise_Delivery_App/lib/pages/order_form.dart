@@ -4,6 +4,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/meal_class.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/order_data_class.dart';
 
 class OrderForm extends StatefulWidget {
   const OrderForm({super.key});
@@ -120,7 +121,7 @@ class _OrderFormState extends State<OrderForm> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SecondOrderPage(orderedMeals: _meals,)),
+                  MaterialPageRoute(builder: (context) => SecondOrderPage(orderData: OrderData.init(_meals),)),
                 );
               },
               style: ElevatedButton.styleFrom(

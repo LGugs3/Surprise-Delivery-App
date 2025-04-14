@@ -1,37 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/order_data_class.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
 import 'package:surpirse_delivery_app/pages/payment_page.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/meal_class.dart';
 
 
 class SecondOrderPage extends StatefulWidget {
-  const SecondOrderPage({super.key, required this.orderedMeals});
+  const SecondOrderPage({super.key, required this.orderData});
 
-  final List<Meal> orderedMeals;
+  final OrderData orderData;
   @override
   State<SecondOrderPage> createState() {
-    return _SecondOrderPageState(orderedMeals);
+    return _SecondOrderPageState(orderData);
   }
 }
 
 class _SecondOrderPageState extends State<SecondOrderPage> {
-  List<Meal> orderedMeals = [];
-  _SecondOrderPageState(orderedMeals);
-
-  // List of available cuisines
-  final List<String> cuisineOptions = [
-    'Fast Food',
-    'Japanese',
-    'Chinese',
-    'Thai',
-    'Italian',
-    'Mexican',
-    'Indian',
-    'French',
-    'Pub/Bar',
-    'Fully Random'
-  ];
+  late OrderData orderData;
+  _SecondOrderPageState(this.orderData);
 
 
   // Controllers for address inputs
@@ -243,10 +230,11 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                         SnackBar(content: Text('Please complete all fields')),
                       );
                     } else {
+                      orderData.cuisineSelection = _selectedCuisine!;
                       // Handle the order submission logic
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Payment(orderedMeals: orderedMeals,)),
+                        MaterialPageRoute(builder: (context) => Payment(orderData: orderData,)),
                       );
                     }
                   },
