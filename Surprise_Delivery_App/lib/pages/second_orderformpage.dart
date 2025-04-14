@@ -2,15 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
 import 'package:surpirse_delivery_app/pages/payment_page.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/meal_class.dart';
+
 
 class SecondOrderPage extends StatefulWidget {
-  const SecondOrderPage({super.key});
+  const SecondOrderPage({super.key, required this.orderedMeals});
 
+  final List<Meal> orderedMeals;
   @override
-  State<SecondOrderPage> createState() => _SecondOrderPageState();
+  State<SecondOrderPage> createState() {
+    return _SecondOrderPageState(orderedMeals);
+  }
 }
 
 class _SecondOrderPageState extends State<SecondOrderPage> {
+  List<Meal> orderedMeals = [];
+  _SecondOrderPageState(orderedMeals);
+
   // List of available cuisines
   final List<String> cuisineOptions = [
     'Fast Food',
@@ -24,6 +32,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
     'Pub/Bar',
     'Fully Random'
   ];
+
 
   // Controllers for address inputs
   final TextEditingController _addressController = TextEditingController();
@@ -237,7 +246,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                       // Handle the order submission logic
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Payment()),
+                        MaterialPageRoute(builder: (context) => Payment(orderedMeals: orderedMeals,)),
                       );
                     }
                   },

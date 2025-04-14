@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/meal_class.dart';
 
 class OrderForm extends StatefulWidget {
   const OrderForm({super.key});
@@ -119,7 +120,7 @@ class _OrderFormState extends State<OrderForm> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SecondOrderPage()),
+                  MaterialPageRoute(builder: (context) => SecondOrderPage(orderedMeals: _meals,)),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -249,55 +250,5 @@ class _OrderFormState extends State<OrderForm> {
         });
       },
     );
-  }
-}
-
-// Meal class to hold the meal state
-class Meal {
-  int mainCount = 0;
-  int sideCount = 0;
-  int drinkCount = 0;
-  int dessertCount = 0;
-  List<String> selectedAllergies = [];
-  List<String> selectedDietaryRestrictions = [];
-
-  // Increment counter
-  void incrementCounter(String mealType) {
-    if (mealType == "main") {
-      mainCount++;
-    } else if (mealType == "side") {
-      sideCount++;
-    } else if (mealType == "drink") {
-      drinkCount++;
-    } else if (mealType == "dessert") {
-      dessertCount++;
-    }
-  }
-
-  // Decrement counter
-  void decrementCounter(String mealType) {
-    if (mealType == "main" && mainCount > 0) {
-      mainCount--;
-    } else if (mealType == "side" && sideCount > 0) {
-      sideCount--;
-    } else if (mealType == "drink" && drinkCount > 0) {
-      drinkCount--;
-    } else if (mealType == "dessert" && dessertCount > 0) {
-      dessertCount--;
-    }
-  }
-
-  // Get the current counter value for a meal type
-  int getCounter(String mealType) {
-    if (mealType == "main") {
-      return mainCount;
-    } else if (mealType == "side") {
-      return sideCount;
-    } else if (mealType == "drink") {
-      return drinkCount;
-    } else if (mealType == "dessert") {
-      return dessertCount;
-    }
-    return 0;
   }
 }

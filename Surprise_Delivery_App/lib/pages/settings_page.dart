@@ -30,7 +30,6 @@ class SettingsPage extends StatelessWidget {
               key: Key("update-preferences-button"),
               child: const Text("Update Preferences"),
               onPressed: () {
-                // ignore: avoid_print
                 print("Update Food Preferences button pressed.");
               },
             ),
@@ -56,7 +55,7 @@ class SettingsPage extends StatelessWidget {
                 child: const Text("Second Order Form Page"),
                 onPressed: () {
                   Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SecondOrderPage()),
+                    MaterialPageRoute(builder: (context) => SecondOrderPage(orderedMeals: [],)),
                   );
                 },
               ),

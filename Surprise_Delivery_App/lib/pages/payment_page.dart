@@ -1,16 +1,27 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
 import 'package:surpirse_delivery_app/pages/home_page.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/meal_class.dart';
+import 'package:http/http.dart' as http;
 
 class Payment extends StatefulWidget {
-  const Payment({super.key});
+  const Payment({super.key, required this.orderedMeals});
+
+  final List<Meal> orderedMeals;
 
   @override
-  State<Payment> createState() => _PaymentState();
+  State<Payment> createState() {
+    return _PaymentState(orderedMeals);
+  }
 }
 
 class _PaymentState extends State<Payment> {
+  List<Meal> orderedMeals = [];
+  _PaymentState(orderedMeals);
+
   // Controllers for card details
   final TextEditingController _cardNumberController = TextEditingController();
   final TextEditingController _expirationController = TextEditingController();
@@ -259,5 +270,25 @@ class _PaymentState extends State<Payment> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    buildOrder();
+  }
+
+  void buildOrder() async
+  {
+    final http.Response response = await http.get(Uri.parse("https://www.themealdb.com/api/json/v1/1/categories.php"));
+
+    if (response.statusCode != 200)
+      throw Exception("Bad http request; error ${response.statusCode}");
+    else
+    {
+      var decoded = jsonDecode(response.body) as Map<String, dynamic>;
+      print(decoded);
+    }
   }
 }
