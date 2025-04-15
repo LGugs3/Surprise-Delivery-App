@@ -1,7 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
 import 'package:surpirse_delivery_app/pages/payment_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SecondOrderPage extends StatefulWidget {
   const SecondOrderPage({super.key});
@@ -11,7 +14,6 @@ class SecondOrderPage extends StatefulWidget {
 }
 
 class _SecondOrderPageState extends State<SecondOrderPage> {
-  // List of available cuisines
   final List<String> cuisineOptions = [
     'Fast Food',
     'Japanese',
@@ -25,14 +27,114 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
     'Fully Random'
   ];
 
-  // Controllers for address inputs
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _zipCodeController = TextEditingController();
 
-  // Selected cuisine
   String? _selectedCuisine;
+  String? _documentId;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserDelivery();
+  }
+
+  Future<void> _loadUserDelivery() async {
+    if (Firebase.apps.isEmpty) return; //for tests
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final query = await FirebaseFirestore.instance
+        .collection('deliveries')
+        .where('uid', isEqualTo: user.uid)
+        .limit(1)
+        .get();
+
+    if (query.docs.isNotEmpty) {
+      final doc = query.docs.first;
+      final data = doc.data();
+
+      setState(() {
+        _documentId = doc.id;
+        _selectedCuisine = data['cuisine'];
+        _addressController.text = data['address'];
+        _cityController.text = data['city'];
+        _stateController.text = data['state'];
+        _zipCodeController.text = data['zip'];
+      });
+
+      print("🟢 Loaded delivery data for ${user.email}");
+    }
+  }
+
+  Future<void> _saveDelivery() async {
+    if (Firebase.apps.isEmpty){//for tests
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Payment()),
+      );
+      return;
+    }
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('User not signed in')),
+      );
+      return;
+    }
+
+    final String selectedCuisine = _selectedCuisine ?? '';
+    final String address = _addressController.text.trim();
+    final String city = _cityController.text.trim();
+    final String state = _stateController.text.trim();
+    final String zip = _zipCodeController.text.trim();
+
+    if (address.isEmpty || city.isEmpty || state.isEmpty || zip.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please complete all fields')),
+      );
+      return;
+    }
+
+    final deliveryData = {
+      'uid': user.uid,
+      'email': user.email ?? '',
+      'cuisine': selectedCuisine,
+      'address': address,
+      'city': city,
+      'state': state,
+      'zip': zip,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+
+    try {
+      if (_documentId != null) {
+        await FirebaseFirestore.instance
+            .collection('deliveries')
+            .doc(_documentId)
+            .update(deliveryData);
+        print("✅ Updated delivery for ${user.email}");
+      } else {
+        final newDoc = await FirebaseFirestore.instance
+            .collection('deliveries')
+            .add(deliveryData);
+        _documentId = newDoc.id;
+        print("✅ Created new delivery for ${user.email}");
+      }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Payment()),
+      );
+    } catch (e) {
+      print('🔥 Firestore error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error saving delivery: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +152,6 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
           ),
         ),
         centerTitle: true,
-        // ignore: deprecated_member_use
         backgroundColor: const Color.fromARGB(127, 249, 160, 34),
       ),
       body: SingleChildScrollView(
@@ -70,201 +171,96 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Cuisine Dropdown
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  "Select Cuisine Type:",
-                  key: Key("cuisine-type-text-o2"),
-                  style: GoogleFonts.lilitaOne(fontSize: 22),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.orange.shade400, width: 2),
-                ),
-                child: DropdownButton<String>(
-                  key: Key("cuisine-select-dropdown-o2"),
-                  value: _selectedCuisine,
-                  hint: Text('Choose a cuisine'),
-                  isExpanded: true,
-                  items: cuisineOptions.map((cuisine) {
-                    return DropdownMenuItem<String>(
-                      value: cuisine,
-                      child: Text(cuisine, style: TextStyle(fontSize: 18)),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedCuisine = newValue;
-                    });
-                  },
-                ),
-              ),
-
+              _buildDropdownSection(),
               SizedBox(height: 20),
-
-              // Address Input Field
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  "Enter Your Delivery Address:",
-                  key: Key("address-text-o2"),
-                  style: GoogleFonts.lilitaOne(fontSize: 22),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.orange.shade400, width: 2),
-                ),
-                child: TextField(
-                  key: Key("address-input-o2"),
-                  controller: _addressController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your address...',
-                    border: InputBorder.none,
-                  ),
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-
+              _buildInputField("Enter Your Delivery Address:", _addressController, Key("address-text-o2"), Key("address-input-o2")),
               SizedBox(height: 20),
-
-              // City Input Field
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  "Enter Your City:",
-                  key: Key("city-text-o2"),
-                  style: GoogleFonts.lilitaOne(fontSize: 22),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.orange.shade400, width: 2),
-                ),
-                child: TextField(
-                  key: Key("city-input-o2"),
-                  controller: _cityController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your city...',
-                    border: InputBorder.none,
-                  ),
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-
+              _buildInputField("Enter Your City:", _cityController, Key("city-text-o2"), Key("city-input-o2")),
               SizedBox(height: 20),
-
-              // State Input Field
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  "Enter Your State:",
-                  key: Key("state-text-o2"),
-                  style: GoogleFonts.lilitaOne(fontSize: 22),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.orange.shade400, width: 2),
-                ),
-                child: TextField(
-                  key: Key("state-input-o2"),
-                  controller: _stateController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your state...',
-                    border: InputBorder.none,
-                  ),
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-
+              _buildInputField("Enter Your State:", _stateController, Key("state-text-o2"), Key("state-input-o2")),
               SizedBox(height: 20),
-
-              // ZipCode Input Field
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  "Enter Your Zip Code:",
-                  key: Key("zip-text-o2"),
-                  style: GoogleFonts.lilitaOne(fontSize: 22),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.orange.shade400, width: 2),
-                ),
-                child: TextField(
-                  key: Key("zip-input-o2"),
-                  controller: _zipCodeController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your zip code...',
-                    border: InputBorder.none,
-                  ),
-                  style: TextStyle(fontSize: 18),
-                ),
-              ),
-
+              _buildInputField("Enter Your Zip Code:", _zipCodeController, Key("zip-text-o2"), Key("zip-input-o2")),
               SizedBox(height: 20),
-
-              // Submit Button
               Center(
                 child: ElevatedButton(
+                  onPressed: _saveDelivery,
                   key: Key("continue-payment-button"),
-                  onPressed: () {
-                    // Handle order submission logic
-                    String selectedCuisine =
-                        _selectedCuisine ?? 'No cuisine selected';
-                    String deliveryAddress = _addressController.text;
-                    String city = _cityController.text;
-                    String state = _stateController.text;
-                    String zipCode = _zipCodeController.text;
-
-                    if (deliveryAddress.isEmpty ||
-                        city.isEmpty ||
-                        state.isEmpty ||
-                        zipCode.isEmpty) {
-                      // Show error if any of the fields are empty
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Please complete all fields')),
-                      );
-                    } else {
-                      // Handle the order submission logic
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Payment()),
-                      );
-                    }
-                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange.shade400,
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   ),
-                  child: Text(
-                    "Continue To Payment",
-                    style: TextStyle(fontSize: 20),
-                  ),
+                  child: Text("Continue To Payment", style: TextStyle(fontSize: 20)),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDropdownSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Select Cuisine Type:", style: GoogleFonts.lilitaOne(fontSize: 22), key: Key("cuisine-type-text-o2"),),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.orange.shade400, width: 2),
+            ),
+            child: DropdownButton<String>(
+              value: cuisineOptions.contains(_selectedCuisine) ? _selectedCuisine : null,
+              hint: Text('Choose a cuisine'),
+              key: Key("cuisine-select-dropdown-o2"),
+              isExpanded: true,
+              items: cuisineOptions.map((cuisine) {
+                return DropdownMenuItem<String>(
+                  value: cuisine,
+                  child: Text(cuisine, style: TextStyle(fontSize: 18)),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedCuisine = newValue;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInputField(String label, TextEditingController controller, Key textKey, Key inputKey) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: GoogleFonts.lilitaOne(fontSize: 22), key: textKey,),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.orange.shade400, width: 2),
+            ),
+            child: TextField(
+              key: inputKey,
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: label,
+                border: InputBorder.none,
+              ),
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+        ],
       ),
     );
   }

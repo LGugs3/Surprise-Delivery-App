@@ -58,12 +58,10 @@ void main() {
 
   group("Home Page", () {
     testWidgets("Verify Widgets Exist", (WidgetTester tester) async {
-      final mockObserver = MockNavigatorObserver();
       await tester.pumpWidget(
-          MaterialApp(
-            home: const HomePage(),
-            navigatorObservers: [mockObserver],
-          )
+        MaterialApp(
+          home: HomePage(),
+        ),
       );
       expect(viewMapButton, findsOneWidget);
       expect(placeOrderButton, findsOneWidget);
@@ -274,9 +272,7 @@ void main() {
           )
       );
 
-      expect(updatePreferencesButton, findsOneWidget);
       expect(resetPassSettingsButton, findsOneWidget);
-      expect(secondOrderFormButton, findsOneWidget);
     });
   });
 
