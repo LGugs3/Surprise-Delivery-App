@@ -17,14 +17,12 @@ Finder submitButton = find.byKey(Key("Login Submit"));
 //home page widgets
 Finder viewMapButton = find.byKey(Key("View Map"));
 Finder placeOrderButton = find.byKey(Key("home-page-order"));
-Finder settingsButton = find.byKey(Key("Settings Button"));
+Finder settingsButton = find.byKey(Key("home-settings-button"));
 Finder homeLogoutButton = find.byKey(Key("home-logout-button"));
 
 //settings page
 Finder settingsState = find.byType(SettingsPage);
 Finder resetPassSettingsButton = find.byKey(Key("reset-password-settings"));
-Finder secondOrderFormButton = find.byKey(Key("second-order-form-button"));
-Finder updatePreferencesButton = find.byKey(Key("update-preferences-button"));
 
 //second order form page
 Finder secondOrderState = find.byType(SecondOrderPage);

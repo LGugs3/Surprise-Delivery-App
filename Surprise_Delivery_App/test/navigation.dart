@@ -55,26 +55,6 @@ void main() {
       expect(settingsState, findsOneWidget);
     });
 
-    /*
-    //error thrown saying the page was too long to be rendered
-    testWidgets("Nav to Second Order Page", (WidgetTester tester) async {
-      final mockObserver = MockNavigatorObserver();
-      await tester.pumpWidget(
-        MaterialApp(
-          home: SettingsPage(),
-          navigatorObservers: [mockObserver],
-        ),
-      );
-
-      tester.ensureVisible(secondOrderFormButton);
-      await tester.tap(secondOrderFormButton);
-      await tester.pumpAndSettle();
-
-      verify(() => mockObserver.didPush(any(), any()));
-      expect(secondOrderState, findsOneWidget);
-    });
-    */
-
     testWidgets("Navigate to Reset Password from Settings", (WidgetTester tester) async {
       final mockObserver = MockNavigatorObserver();
       await tester.pumpWidget(

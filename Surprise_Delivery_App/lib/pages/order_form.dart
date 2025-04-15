@@ -46,6 +46,13 @@ class _OrderFormState extends State<OrderForm> {
     });
   }
 
+  // Function to add a kids meal
+  void _addKidsMeal() {
+    setState(() {
+      _meals.add(Meal(isKidsMeal: true));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,19 +101,33 @@ class _OrderFormState extends State<OrderForm> {
                 ),
               ),
               child: ListView.builder(
-                itemCount: _meals.length + 1, // Extra 1 for the Add Meal button
+                itemCount: _meals.length +
+                    2, // Extra 2 for the Add Meal button and Kids Meal
                 itemBuilder: (context, index) {
                   if (index < _meals.length) {
                     return _buildMealElement(_meals[index], index);
-                  } else {
+                  } else if (index == _meals.length) {
                     // Add Meal button at the bottom of the list
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: FloatingActionButton(
                         onPressed: _addMeal,
                         key: Key("add-meal-button"),
+                        heroTag: 'add-meal-hero-button',
                         backgroundColor: Colors.orange.shade400,
                         child: Icon(Icons.add),
+                      ),
+                    );
+                  } else {
+                    // Kids Meal button
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: FloatingActionButton(
+                        onPressed: _addKidsMeal,
+                        key: Key("add-kids-meal-button"),
+                        heroTag: 'add-kids-meal-hero-button',
+                        backgroundColor: Colors.orange.shade400,
+                        child: Icon(Icons.child_care),
                       ),
                     );
                   }
@@ -152,9 +173,26 @@ class _OrderFormState extends State<OrderForm> {
       key: Key("meal-container"),
       child: Column(
         children: <Widget>[
-          Text(
-            "Meal ${index + 1}",
-            style: GoogleFonts.lilitaOne(fontSize: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Display "Kids Meal" if it's a kids meal, else "Meal"
+              Text(
+                meal.isKidsMeal
+                    ? "Kids Meal ${index + 1}"
+                    : "Meal ${index + 1}",
+                style: GoogleFonts.lilitaOne(fontSize: 20),
+              ),
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.black),
+                onPressed: () {
+                  // Remove the meal from the list
+                  setState(() {
+                    _meals.removeAt(index);
+                  });
+                },
+              ),
+            ],
           ),
           SizedBox(height: 10),
           _buildMealItem("Main", meal, "main", index),
@@ -187,7 +225,13 @@ class _OrderFormState extends State<OrderForm> {
           style: GoogleFonts.lilitaOne(fontSize: 18),
         ),
         Spacer(),
-        _buildCounterButtons(meal, mealType),
+        // If it's a kids meal, we don't allow increment/decrement
+        meal.isKidsMeal
+            ? Text(
+                "1", // Always 1 for kids meal
+                style: GoogleFonts.lilitaOne(fontSize: 20),
+              )
+            : _buildCounterButtons(meal, mealType),
       ],
     );
   }

@@ -318,23 +318,28 @@ class _PaymentState extends State<Payment> {
     else
     {
       Map<String, dynamic> cuisineCategory = jsonDecode(response.body) as Map<String, dynamic>;
-      if (orderData.orderedMeals.length  > cuisineCategory["meals"].length){
-        //isnt accurate but close enough
-        warningsList.add("number of meals ordered is greater than possible meals");
-      }
-
 
       //print((await getMealByID(cuisineCategory["meals"][0]["idMeal"]))?.keys);
       List<Map<String, dynamic>> mainMeals = List<Map<String, dynamic>>.empty(growable: true);
       List<Map<String, dynamic>> sideMeals = List<Map<String, dynamic>>.empty(growable: true);
       List<Map<String, dynamic>> dessertMeals = List<Map<String, dynamic>>.empty(growable: true);
 
+      if (cuisineCategory.isEmpty || cuisineCategory["meals"] == null){
+        print("fetched db is empty");
+        warningsList.add("Fetched database is empty");
+        return;
+      }
       for(Map<String, dynamic> meal in cuisineCategory["meals"]){
         Map<String, dynamic>? nextMeal = await getMealByID(meal["idMeal"]);
         if (nextMeal == null){
           warningsList.add("some meals were not able to be fetched");
+          continue;
         }
         else{
+          if (nextMeal.isEmpty){
+            warningsList.add("some meals were not able to be fetched");
+            continue;
+          }
           //add meal to one of the three lists
           String nextCat = nextMeal["strCategory"];
           if(nextCat == "Dessert"){
