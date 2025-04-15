@@ -3,6 +3,7 @@
 import 'dart:math';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
@@ -76,11 +77,23 @@ class _HomePageState extends State<HomePage> {
   // variable to control the selected item
   int selectedItem = 0;
 
+  void initWheelSpin()
+  {
+    setState(() {
+      selectedItem = Random().nextInt(cuisineOptions.length);
+      controller.add(selectedItem);
+    });
+  }
+
   @override
   void initState() {
-    super.initState();
     _centerController =
         ConfettiController(duration: const Duration(seconds: 10));
+
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initWheelSpin();
+    });
   }
 
   @override
@@ -157,6 +170,52 @@ class _HomePageState extends State<HomePage> {
                   // the space between buttons and the wheel
                   SizedBox(height: 200),
 
+                  // Row with Uey and speech bubble
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Image.asset(
+                            'assets/images/Uey.png',
+                            width: 200,
+                            height: 200,
+                          ),
+                        ),
+                        Stack(
+                          children: [
+                            Transform.translate(
+                              offset: Offset(0, -40),
+                              child: Image.asset(
+                                'assets/images/speech_bubble.png',
+                                width: 150,
+                                height: 150,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              left: 40,
+                              child: Visibility(
+                                visible: selectedCuisine.isNotEmpty,
+                                child: Text(
+                                  'Uey picks\n$selectedCuisine',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 20),
                   // fortune wheel integration
                   SizedBox(
                     height: 400,
@@ -211,8 +270,9 @@ class _HomePageState extends State<HomePage> {
                                               maxBlastForce: 10,
                                               minBlastForce: 1,
                                               emissionFrequency: 0.03,
-                                              numberOfParticles: 100,
+                                              numberOfParticles: 50,
                                               gravity: 0,
+                                              shouldLoop: false,
                                             ),
                                           ),
                                         ),
@@ -236,21 +296,20 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       onFocusItemChanged: (value) {
-                        if (flag == true) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            setState(() {
-                              selectedCuisine = cuisineOptions[value];
-                            });
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          setState(() {
+                            selectedCuisine = cuisineOptions[
+                                value]; // Update state after build
                           });
-                        } else {
-                          flag = true;
-                        }
+                        });
                       },
                     ),
                   ),
                   // button below wheel
                   ElevatedButton(
-                    onPressed: spinWheel,
+                    onPressed: () {
+                      spinWheel();
+                    },
                     child: Text("Spin the Wheel!"),
                   ),
                 ],
