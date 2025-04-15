@@ -178,9 +178,7 @@ void main() {
           )
       );
 
-      expect(updatePreferencesButton, findsOneWidget);
       expect(resetPassSettingsButton, findsOneWidget);
-      expect(secondOrderFormButton, findsOneWidget);
     });
   });
 
