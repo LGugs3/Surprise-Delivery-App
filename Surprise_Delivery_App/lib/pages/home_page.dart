@@ -22,52 +22,37 @@ class HomePage extends StatefulWidget {
 // the buttons for homepage are here
 Row buttonRow(BuildContext context) {
   return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: <Widget>[
-      Column(
-        children: <Widget>[
-          ElevatedButton(
-            key: Key("home-page-order"),
-            child: const Text("Place Order"),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => OrderForm()),
-              );
-            },
-          )
-        ],
-      ),
-      Column(
-        children: <Widget>[
-          ElevatedButton(
-            key: Key("View Map"),
-            child: const Text("View Map"),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BaseMap()),
-              );
-            },
-          )
-        ],
-      ),
-      Column(
-        children: <Widget>[
-          ElevatedButton(
-            key: Key("Settings Button"),
-            child: const Text("Settings"),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SettingsPage()),
-              );
-            },
-          )
-        ],
-      )
-    ],
-  );
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            ElevatedButton(
+              key: Key("home-page-order"),
+              child: const Text("Place Order"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OrderForm()),
+                );
+              },
+            )
+          ],
+        ),
+        Column(
+          children: <Widget>[
+            ElevatedButton(
+              key: Key("View Map"),
+              child: const Text("View Map"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BaseMap()),
+                );
+              },
+            )
+          ],
+        ),
+      ]);
 }
 
 class _HomePageState extends State<HomePage> {
@@ -88,6 +73,7 @@ class _HomePageState extends State<HomePage> {
   ];
 
   String selectedCuisine = "";
+  bool flag = false;
   // variable to control the selected item
   int selectedItem = 0;
 
@@ -105,7 +91,6 @@ class _HomePageState extends State<HomePage> {
         ConfettiController(duration: const Duration(seconds: 10));
 
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initWheelSpin();
     });
@@ -134,6 +119,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("UPick"),
         backgroundColor: const Color.fromARGB(127, 239, 214, 29),
+        leading: IconButton(
+          key: Key("home-settings-button"),
+          icon: const Icon(Icons.settings),
+          tooltip: 'Settings',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SettingsPage()),
+            );
+          },
+        ),
         actions: [
           IconButton(
             key: Key("home-logout-button"),
@@ -172,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   buttonRow(context),
                   // the space between buttons and the wheel
-                  SizedBox(height: 20),
+                  SizedBox(height: 200),
 
                   // Row with Uey and speech bubble
                   Padding(
