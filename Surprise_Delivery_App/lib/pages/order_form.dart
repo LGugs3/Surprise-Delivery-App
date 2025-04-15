@@ -138,10 +138,32 @@ class _OrderFormState extends State<OrderForm> {
             child: ElevatedButton(
               key: Key("second-page-order"),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SecondOrderPage()),
-                );
+                bool isValid = false;
+                if (_meals.every((meal) =>
+                    meal.isKidsMeal ||
+                    meal.mainCount > 0 ||
+                    meal.sideCount > 0 ||
+                    meal.drinkCount > 0 ||
+                    meal.dessertCount > 0))
+                  {
+                    // If meals are valid, Proceed
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SecondOrderPage()),
+                    );
+                  }
+                else
+                  {
+                    // Prompt user to order/select something
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('One of your meals has no items selected. Please add an item regardless of category or delete excess meals.'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange.shade400, // Button color
