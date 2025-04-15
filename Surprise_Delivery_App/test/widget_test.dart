@@ -12,12 +12,4 @@ import 'navigation.dart' as nav_test;
 void main() {
   nav_test.main();
   std_test.main();
-  // Tap the '+' icon and trigger a frame.
-  //tester.ensureVisible(finder);
-  //await tester.tap(find.byIcon(Icons.add));
-  //await tester.pumpAndSettle();
-
-  // Verify that our counter has incremented.
-  //expect(find.text('0'), findsNothing);
-  //expect(find.text('1'), findsOneWidget);
 }
