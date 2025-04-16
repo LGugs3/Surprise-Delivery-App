@@ -19,6 +19,39 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _passwordTextController = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
   @override
+  // Signin function
+  void _signIn() {
+    // Check if the fields are empty
+    if (_emailTextController.text.isEmpty || _passwordTextController.text.isEmpty) {
+      // Show a Snackbar with a message if the fields are empty
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Fields cannot be left blank. New to UPick? Sign up below!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return; // Exit the function early
+    }
+
+    // Sign the user in
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+        email: _emailTextController.text,
+        password: _passwordTextController.text)
+        .then((value) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    }).onError((error, stackTrace) {
+      // If credentials are invalid, notify the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter a valid username or email and password'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      print("Error ${error.toString()}"); // Optional: log the error for debugging
+    });
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -47,22 +80,13 @@ class _SignInPageState extends State<SignInPage> {
                   height: 20,
                 ),
                 reusableTextField("Enter Password", Icons.lock_outline, true,
-                    _passwordTextController, givenKey: Key("Password Input")),
+                    _passwordTextController, givenKey: Key("Password Input"),
+                  textInputAction: TextInputAction.done, onSubmitted: (_) => _signIn(),),
                 const SizedBox(
                   height: 5,
                 ),
                 forgetPassword(context),
-                firebaseUIButton(givenKey: Key("Login Submit"), context, "Sign In", () {
-                  FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                      email: _emailTextController.text,
-                      password: _passwordTextController.text)
-                      .then((value) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                  }).onError((error, stackTrace) {
-                    print("Error ${error.toString()}");
-                  });
-                }),
+                firebaseUIButton(givenKey: Key("Login Submit"), context, "Sign In", _signIn,),
                 signUpOption()
               ],
             ),
