@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
-import 'package:surpirse_delivery_app/pages/home_page.dart';
+import 'package:surpirse_delivery_app/pages/reciept_page.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/order_data_class.dart';
 
 class Payment extends StatefulWidget {
-  const Payment({super.key});
+  const Payment({super.key, required this.orderData});
+
+  final OrderData orderData;
 
   @override
-  State<Payment> createState() => _PaymentState();
+  State<Payment> createState() {
+    return _PaymentState(orderData);
+  }
 }
 
 class _PaymentState extends State<Payment> {
+  late OrderData orderData;
+  _PaymentState(this.orderData);
+
   // Controllers for card details
   final TextEditingController _cardNumberController = TextEditingController();
   final TextEditingController _expirationController = TextEditingController();
@@ -239,8 +247,8 @@ class _PaymentState extends State<Payment> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage()), // will be changed to some sort of order processing/delivery page
+                          builder: (context) => Reciept(orderData: orderData),
+                        ),
                       );
                     }
                   },

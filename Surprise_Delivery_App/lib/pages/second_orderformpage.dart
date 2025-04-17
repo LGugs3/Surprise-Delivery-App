@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/order_data_class.dart';
 import 'package:surpirse_delivery_app/utils/color_utils.dart';
 import 'package:surpirse_delivery_app/pages/payment_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/meal_class.dart';
+
 
 class SecondOrderPage extends StatefulWidget {
-  const SecondOrderPage({super.key});
+  const SecondOrderPage({super.key, required this.orderData});
 
+  final OrderData orderData;
   @override
-  State<SecondOrderPage> createState() => _SecondOrderPageState();
+  State<SecondOrderPage> createState() {
+    return _SecondOrderPageState(orderData);
+  }
 }
 
 class _SecondOrderPageState extends State<SecondOrderPage> {
-  final List<String> cuisineOptions = [
-    'Fast Food',
-    'Japanese',
-    'Chinese',
-    'Thai',
-    'Italian',
-    'Mexican',
-    'Indian',
-    'French',
-    'Pub/Bar',
-    'Fully Random'
-  ];
+  late OrderData orderData;
+  _SecondOrderPageState(this.orderData);
+
 
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
@@ -115,9 +112,10 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
         print("✅ Created new delivery for ${user.email}");
       }
 
+      orderData.cuisineSelection = _selectedCuisine!;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Payment()),
+        MaterialPageRoute(builder: (context) => Payment(orderData: orderData,)),
       );
     } catch (e) {
       print('🔥 Firestore error: $e');
