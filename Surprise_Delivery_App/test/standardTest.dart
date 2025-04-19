@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 //import 'package:mockito/annotations.dart';
@@ -12,6 +10,7 @@ import 'package:surpirse_delivery_app/pages/payment_page.dart';
 import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/order_data_class.dart';
 import 'finder_widgets.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
@@ -176,24 +175,30 @@ void main() {
 
   group("Second Order Form", () {
     testWidgets("Verify Widgets Exist", (WidgetTester tester) async {
-        await tester.pumpWidget(MaterialApp(
-          home: SecondOrderPage(),
-        ));
+      final OrderData orderData = OrderData.empty();
+      orderData.randomizeOrder();
 
-        expect(cuisineTypeText, findsOneWidget);
-        expect(cuisineDropdownSecondForm, findsOneWidget);
-        expect(addressTextSecondForm, findsOneWidget);
-        expect(addressInputSecondForm, findsOneWidget);
-        expect(cityInputSecondForm, findsOneWidget);
-        expect(stateTextSecondForm, findsOneWidget);
-        expect(stateInputSecondForm, findsOneWidget);
-        expect(zipTextSecondForm, findsOneWidget);
-        expect(zipInputSecondForm, findsOneWidget);
+      await tester.pumpWidget(MaterialApp(
+        home: SecondOrderPage(orderData: orderData,),
+      ));
+
+      expect(cuisineTypeText, findsOneWidget);
+      expect(cuisineDropdownSecondForm, findsOneWidget);
+      expect(addressTextSecondForm, findsOneWidget);
+      expect(addressInputSecondForm, findsOneWidget);
+      expect(cityInputSecondForm, findsOneWidget);
+      expect(stateTextSecondForm, findsOneWidget);
+      expect(stateInputSecondForm, findsOneWidget);
+      expect(zipTextSecondForm, findsOneWidget);
+      expect(zipInputSecondForm, findsOneWidget);
     });
 
     testWidgets("Fill Form", (WidgetTester tester) async {
+      final OrderData orderData = OrderData.empty();
+      orderData.randomizeOrder();
+
       await tester.pumpWidget(MaterialApp(
-        home: SecondOrderPage(),
+        home: SecondOrderPage(orderData: orderData,),
       ));
 
       int rng = Random().nextInt(cuisineTypes.length);
@@ -212,8 +217,11 @@ void main() {
 
   group("Payment Page", () {
     testWidgets("Verify Widgets Exist", (WidgetTester tester) async {
+      final OrderData orderData = OrderData.empty();
+      orderData.randomizeOrder();
+
       await tester.pumpWidget(MaterialApp(
-        home: Payment(),
+        home: Payment(orderData: orderData,),
       ));
 
       expect(payAmountTextPayForm, findsOneWidget);
@@ -231,8 +239,11 @@ void main() {
     });
 
     testWidgets("Fill Form", (WidgetTester tester) async {
+      final OrderData orderData = OrderData.empty();
+      orderData.randomizeOrder();
+
       await tester.pumpWidget(MaterialApp(
-        home: Payment(),
+        home: Payment(orderData: orderData,),
       ));
 
       //key is x offset starting from the initial position(60); value is the slider value

@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:surpirse_delivery_app/pages/reset_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/order_data_class.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

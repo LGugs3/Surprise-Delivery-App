@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -5,6 +6,7 @@ import 'package:surpirse_delivery_app/pages/home_page.dart';
 import 'package:surpirse_delivery_app/pages/order_form.dart';
 import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/order_data_class.dart';
 import 'finder_widgets.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
@@ -102,6 +104,12 @@ void main() {
         ),
       );
 
+      //add meal before submitting
+      Finder incMainMeal = getMealContainerAcc("main", true);
+      tester.ensureVisible(incMainMeal);
+      await tester.tap(incMainMeal);
+      await tester.pump();
+
       expect(continueOrderButton, findsOneWidget);
       tester.ensureVisible(continueOrderButton);
       await tester.tap(continueOrderButton);
@@ -113,10 +121,13 @@ void main() {
     });
 
     testWidgets("Nav to Payment from second order form", (WidgetTester tester) async {
+      final OrderData orderData = OrderData.empty();
+      orderData.randomizeOrder();
+
       final mockObserver = MockNavigatorObserver();
       await tester.pumpWidget(
         MaterialApp(
-          home: SecondOrderPage(),
+          home: SecondOrderPage(orderData: orderData,),
           navigatorObservers: [mockObserver],
         ),
       );
