@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 //import 'package:mockito/annotations.dart';
@@ -7,8 +6,11 @@ import 'package:mockito/mockito.dart';
 import 'package:surpirse_delivery_app/pages/base_map.dart';
 import 'package:surpirse_delivery_app/pages/home_page.dart';
 import 'package:surpirse_delivery_app/pages/order_form.dart';
+import 'package:surpirse_delivery_app/pages/payment_page.dart';
+import 'package:surpirse_delivery_app/pages/second_orderformpage.dart';
 import 'package:surpirse_delivery_app/pages/settings_page.dart';
 import 'package:surpirse_delivery_app/pages/signin_page.dart';
+import 'package:surpirse_delivery_app/reusable_widgets/order_data_class.dart';
 import 'finder_widgets.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
@@ -64,6 +66,8 @@ void main() {
       expect(placeOrderButton, findsOneWidget);
       expect(settingsButton, findsOneWidget);
       expect(homeLogoutButton, findsOneWidget);
+      expect(homeFortuneWheel, findsOneWidget);
+      expect(homeWheelButton, findsOneWidget);
     });
 
     testWidgets("Press View Map Button", (WidgetTester tester) async {
@@ -98,6 +102,7 @@ void main() {
       expect(find.text("Help Us Pick!"), findsExactly(2));
       expect(addMealButton, findsOneWidget);
       expect(mealContainer, findsOneWidget);
+      expect(continueOrderButton, findsOneWidget);
 
       //Widgets inside container
       for (final entree in entreeTypes)
@@ -165,6 +170,103 @@ void main() {
         counterWidget = entreeCount.evaluate().single.widget as Text;
         expect(counterWidget.data, (incRng - decRng).clamp(0, 10).toString());
       }
+    });
+  });
+
+  group("Second Order Form", () {
+    testWidgets("Verify Widgets Exist", (WidgetTester tester) async {
+      final OrderData orderData = OrderData.empty();
+      orderData.randomizeOrder();
+
+      await tester.pumpWidget(MaterialApp(
+        home: SecondOrderPage(orderData: orderData,),
+      ));
+
+      expect(cuisineTypeText, findsOneWidget);
+      expect(cuisineDropdownSecondForm, findsOneWidget);
+      expect(addressTextSecondForm, findsOneWidget);
+      expect(addressInputSecondForm, findsOneWidget);
+      expect(cityInputSecondForm, findsOneWidget);
+      expect(stateTextSecondForm, findsOneWidget);
+      expect(stateInputSecondForm, findsOneWidget);
+      expect(zipTextSecondForm, findsOneWidget);
+      expect(zipInputSecondForm, findsOneWidget);
+    });
+
+    testWidgets("Fill Form", (WidgetTester tester) async {
+      final OrderData orderData = OrderData.empty();
+      orderData.randomizeOrder();
+
+      await tester.pumpWidget(MaterialApp(
+        home: SecondOrderPage(orderData: orderData,),
+      ));
+
+      int rng = Random().nextInt(cuisineTypes.length);
+      await fillSecondOrderForm(tester, rng);
+
+      //find inputted text
+      for(String field in secondOrderFormInputFields.values)
+      {
+        expect(find.text(field), findsOneWidget);
+      }
+    });
+  });
+
+  group("Payment Page", () {
+    testWidgets("Verify Widgets Exist", (WidgetTester tester) async {
+      final OrderData orderData = OrderData.empty();
+      orderData.randomizeOrder();
+
+      await tester.pumpWidget(MaterialApp(
+        home: Payment(orderData: orderData,),
+      ));
+
+      expect(payAmountTextPayForm, findsOneWidget);
+      expect(payAmountSliderPayForm, findsOneWidget);
+      expect(credCardTextPayForm, findsOneWidget);
+      expect(expDateTextPayForm, findsOneWidget);
+      expect(expDateInputPayForm, findsOneWidget);
+      expect(secCodeTextPayForm, findsOneWidget);
+      expect(secCodeInputPayForm, findsOneWidget);
+      expect(countryTextPayForm, findsOneWidget);
+      expect(countryInputPayForm, findsOneWidget);
+      expect(zipTextPayForm, findsOneWidget);
+      expect(zipInputPayForm, findsOneWidget);
+      expect(completeOrderButton, findsOneWidget);
+    });
+
+    testWidgets("Fill Form", (WidgetTester tester) async {
+      final OrderData orderData = OrderData.empty();
+      orderData.randomizeOrder();
+
+      await tester.pumpWidget(MaterialApp(
+        home: Payment(orderData: orderData,),
+      ));
+
+      //key is x offset starting from the initial position(60); value is the slider value
+      //for some reason grabbing the slider automatically puts it in the middle, also cant get to 20
+      final Map<double, double> sliderOffsets = {
+        -250.0: 30.0,
+        -150.0: 40.0,
+        -50.0: 50.0,
+        0.0: 60.0,
+        50.0: 70.0,
+        150.0: 80.0,
+        350.0: 100.0,
+      };
+      randomKey(Map map) => map.entries.elementAt(Random().nextInt(map.length));
+
+      //get random offset
+      MapEntry<dynamic, dynamic> newRandom = randomKey(sliderOffsets);
+      Slider paySlider = payAmountSliderPayForm.evaluate().single.widget as Slider;
+      tester.ensureVisible(payAmountSliderPayForm);
+      expect(paySlider.value, equals(20.0));
+      await tester.drag(payAmountSliderPayForm, Offset(newRandom.key, 0));
+      await tester.pump();
+
+      //check slider value is correct
+      paySlider = payAmountSliderPayForm.evaluate().single.widget as Slider;
+      expect(paySlider.value, equals(newRandom.value));
     });
   });
 

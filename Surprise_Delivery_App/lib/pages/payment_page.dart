@@ -69,6 +69,7 @@ class _PaymentState extends State<Payment> {
                 child: Text(
                   "Payment Amount: \$${_paymentAmount.toStringAsFixed(2)}",
                   style: GoogleFonts.lilitaOne(fontSize: 22),
+                  key: Key("pay-amount-text-pay"),
                 ),
               ),
               Slider(
@@ -76,6 +77,7 @@ class _PaymentState extends State<Payment> {
                 min: 20.0,
                 max: 100.0,
                 divisions: 8,
+                key: Key("pay-slider-pay"),
                 onChanged: (double newValue) {
                   setState(() {
                     _paymentAmount = newValue;
@@ -92,6 +94,7 @@ class _PaymentState extends State<Payment> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   "Card Number:",
+                  key: Key("ccard-text-pay"),
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -103,6 +106,7 @@ class _PaymentState extends State<Payment> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
+                  key: Key("ccard-input-pay"),
                   controller: _cardNumberController,
                   decoration: InputDecoration(
                     hintText: 'XXXX XXXX XXXX XXXX',
@@ -119,6 +123,7 @@ class _PaymentState extends State<Payment> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   "Expiration:",
+                  key: Key("exp-date-text-pay"),
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -130,6 +135,7 @@ class _PaymentState extends State<Payment> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
+                  key: Key("exp-date-input-pay"),
                   controller: _expirationController,
                   decoration: InputDecoration(
                     hintText: 'MM/YY',
@@ -146,6 +152,7 @@ class _PaymentState extends State<Payment> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   "CVC:",
+                  key: Key("security-code-text-pay"),
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -157,6 +164,7 @@ class _PaymentState extends State<Payment> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
+                  key: Key("security-code-input-pay"),
                   controller: _cvcController,
                   decoration: InputDecoration(
                     hintText: 'CVC',
@@ -173,6 +181,7 @@ class _PaymentState extends State<Payment> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   "Country:",
+                  key: Key("country-text-pay"),
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -184,6 +193,7 @@ class _PaymentState extends State<Payment> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
+                  key: Key("country-input-pay"),
                   controller: _countryController,
                   decoration: InputDecoration(
                     hintText: 'Country',
@@ -200,6 +210,7 @@ class _PaymentState extends State<Payment> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   "Enter Your Zip Code:",
+                  key: Key("zip-text-pay"),
                   style: GoogleFonts.lilitaOne(fontSize: 22),
                 ),
               ),
@@ -211,6 +222,7 @@ class _PaymentState extends State<Payment> {
                   border: Border.all(color: Colors.orange.shade400, width: 2),
                 ),
                 child: TextField(
+                  key: Key("zip-input-pay"),
                   controller: _zipCodeController,
                   decoration: InputDecoration(
                     hintText: 'Enter your zip code...',
@@ -225,6 +237,7 @@ class _PaymentState extends State<Payment> {
               // Submit Button
               Center(
                 child: ElevatedButton(
+                  key: Key("place-order-button"),
                   onPressed: () {
                     // Handle order submission logic
                     String cardNumber = _cardNumberController.text;

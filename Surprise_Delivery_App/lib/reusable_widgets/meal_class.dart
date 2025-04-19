@@ -9,6 +9,8 @@ class Meal {
   bool isKidsMeal = false; // Add this to track kids meal
 
   Meal({this.isKidsMeal = false}); // Constructor for kids meal
+  Meal.init(this.mainCount, this.sideCount, this.drinkCount, this.dessertCount);
+  Meal.random(rng) : this.init(rng, rng, rng, rng);
 
   // Increment counter
   void incrementCounter(String mealType) {

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/order_data_class.dart';
@@ -36,6 +37,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
   }
 
   Future<void> _loadUserDelivery() async {
+    if (Firebase.apps.isEmpty) return; //for tests
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
@@ -63,6 +65,14 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
   }
 
   Future<void> _saveDelivery() async {
+    if (Firebase.apps.isEmpty){//for tests
+      orderData.cuisineSelection = _selectedCuisine!;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Payment(orderData: orderData,)),
+      );
+      return;
+    }
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -168,17 +178,18 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   _buildDropdownSection(),
                   SizedBox(height: 20),
                   _buildInputField(
-                      "Enter Your Delivery Address:", _addressController),
+                      "Enter Your Delivery Address:", _addressController, Key("address-text-o2"), Key("address-input-o2")),
                   SizedBox(height: 20),
-                  _buildInputField("Enter Your City:", _cityController),
+                  _buildInputField("Enter Your City:", _cityController, Key("city-text-o2"), Key("city-input-o2")),
                   SizedBox(height: 20),
-                  _buildInputField("Enter Your State:", _stateController),
+                  _buildInputField("Enter Your State:", _stateController, Key("state-text-o2"), Key("state-input-o2")),
                   SizedBox(height: 20),
-                  _buildInputField("Enter Your Zip Code:", _zipCodeController),
+                  _buildInputField("Enter Your Zip Code:", _zipCodeController, Key("zip-text-o2"), Key("zip-input-o2")),
                   SizedBox(height: 20),
                   Center(
                     child: ElevatedButton(
                       onPressed: _saveDelivery,
+                  key: Key("continue-payment-button"),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orange.shade400,
                         padding:
@@ -201,8 +212,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Select Cuisine Type:",
-              style: GoogleFonts.lilitaOne(fontSize: 22)),
+          Text("Select Cuisine Type:", style: GoogleFonts.lilitaOne(fontSize: 22), key: Key("cuisine-type-text-o2"),),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             decoration: BoxDecoration(
@@ -215,6 +225,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   ? _selectedCuisine
                   : null,
               hint: Text('Choose a cuisine'),
+              key: Key("cuisine-select-dropdown-o2"),
               isExpanded: true,
               items: cuisineOptions.map((cuisine) {
                 return DropdownMenuItem<String>(
@@ -234,13 +245,13 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
     );
   }
 
-  Widget _buildInputField(String label, TextEditingController controller) {
+  Widget _buildInputField(String label, TextEditingController controller, Key textKey, Key inputKey) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: GoogleFonts.lilitaOne(fontSize: 22)),
+          Text(label, style: GoogleFonts.lilitaOne(fontSize: 22), key: textKey,),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             decoration: BoxDecoration(
@@ -249,6 +260,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
               border: Border.all(color: Colors.orange.shade400, width: 2),
             ),
             child: TextField(
+              key: inputKey,
               controller: controller,
               decoration: InputDecoration(
                 hintText: label,

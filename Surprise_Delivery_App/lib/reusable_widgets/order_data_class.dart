@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'meal_class.dart';
 
 class OrderData
@@ -10,6 +14,16 @@ class OrderData
   OrderData.empty() : this([], "", 0);
   OrderData.init(order) : this(order, "", 0);
   OrderData.noPay(order, cuisine) : this(order, cuisine, 100);
+  
+  void randomizeOrder() {
+    Random rng = Random();
+    int numMeals = rng.nextInt(10) + 1;
+    for (int i = 0; i < numMeals; i++){
+      orderedMeals.add(Meal.random(rng.nextInt(5)));
+    }
+    cuisineSelection = cuisineOptions[rng.nextInt(cuisineOptions.length)];
+    paymentAmount = rng.nextInt(80) + 20;
+  }
 }
 
 // List of available cuisines
