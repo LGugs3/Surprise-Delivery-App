@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   buttonRow(context),
                   // the space between buttons and the wheel
-                  SizedBox(height: 200),
+                  SizedBox(height: 50),
 
                   // Row with Uey and speech bubble
                   Padding(

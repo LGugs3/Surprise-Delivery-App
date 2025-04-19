@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:surpirse_delivery_app/reusable_widgets/meal_class.dart';
 
-
 class SecondOrderPage extends StatefulWidget {
   const SecondOrderPage({super.key, required this.orderData});
 
@@ -21,7 +20,6 @@ class SecondOrderPage extends StatefulWidget {
 class _SecondOrderPageState extends State<SecondOrderPage> {
   late OrderData orderData;
   _SecondOrderPageState(this.orderData);
-
 
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
@@ -60,7 +58,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
         _zipCodeController.text = data['zip'];
       });
 
-      print("🟢 Loaded delivery data for ${user.email}");
+      print("Loaded delivery data for ${user.email}");
     }
   }
 
@@ -103,19 +101,22 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
             .collection('deliveries')
             .doc(_documentId)
             .update(deliveryData);
-        print("✅ Updated delivery for ${user.email}");
+        print("Updated delivery for ${user.email}");
       } else {
         final newDoc = await FirebaseFirestore.instance
             .collection('deliveries')
             .add(deliveryData);
         _documentId = newDoc.id;
-        print("✅ Created new delivery for ${user.email}");
+        print("Created new delivery for ${user.email}");
       }
 
       orderData.cuisineSelection = _selectedCuisine!;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Payment(orderData: orderData,)),
+        MaterialPageRoute(
+            builder: (context) => Payment(
+                  orderData: orderData,
+                )),
       );
     } catch (e) {
       print('🔥 Firestore error: $e');
@@ -128,63 +129,70 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        title: Text(
-          "Help Us Pick!",
-          style: GoogleFonts.lilitaOne(
-            fontSize: 30,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 4
-              ..color = Colors.black,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: const Color.fromARGB(127, 249, 160, 34),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                hexStringToColor("2ec7a3"),
-                hexStringToColor("12e0b0"),
-                hexStringToColor("0fb5ec")
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          title: Text(
+            "Help Us Pick!",
+            style: GoogleFonts.lilitaOne(
+              fontSize: 30,
+              foreground: Paint()
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 4
+                ..color = Colors.black,
             ),
           ),
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildDropdownSection(),
-              SizedBox(height: 20),
-              _buildInputField("Enter Your Delivery Address:", _addressController),
-              SizedBox(height: 20),
-              _buildInputField("Enter Your City:", _cityController),
-              SizedBox(height: 20),
-              _buildInputField("Enter Your State:", _stateController),
-              SizedBox(height: 20),
-              _buildInputField("Enter Your Zip Code:", _zipCodeController),
-              SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  onPressed: _saveDelivery,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange.shade400,
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                  ),
-                  child: Text("Continue To Payment", style: TextStyle(fontSize: 20)),
+          centerTitle: true,
+          backgroundColor: const Color.fromARGB(127, 249, 160, 34),
+        ),
+        body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height - kToolbarHeight,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    hexStringToColor("2ec7a3"),
+                    hexStringToColor("12e0b0"),
+                    hexStringToColor("0fb5ec")
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
               ),
-            ],
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _buildDropdownSection(),
+                  SizedBox(height: 20),
+                  _buildInputField(
+                      "Enter Your Delivery Address:", _addressController),
+                  SizedBox(height: 20),
+                  _buildInputField("Enter Your City:", _cityController),
+                  SizedBox(height: 20),
+                  _buildInputField("Enter Your State:", _stateController),
+                  SizedBox(height: 20),
+                  _buildInputField("Enter Your Zip Code:", _zipCodeController),
+                  SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: _saveDelivery,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange.shade400,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                      ),
+                      child: Text("Continue To Payment",
+                          style: TextStyle(fontSize: 20)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _buildDropdownSection() {
@@ -193,7 +201,8 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Select Cuisine Type:", style: GoogleFonts.lilitaOne(fontSize: 22)),
+          Text("Select Cuisine Type:",
+              style: GoogleFonts.lilitaOne(fontSize: 22)),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             decoration: BoxDecoration(
@@ -202,7 +211,9 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
               border: Border.all(color: Colors.orange.shade400, width: 2),
             ),
             child: DropdownButton<String>(
-              value: cuisineOptions.contains(_selectedCuisine) ? _selectedCuisine : null,
+              value: cuisineOptions.contains(_selectedCuisine)
+                  ? _selectedCuisine
+                  : null,
               hint: Text('Choose a cuisine'),
               isExpanded: true,
               items: cuisineOptions.map((cuisine) {
