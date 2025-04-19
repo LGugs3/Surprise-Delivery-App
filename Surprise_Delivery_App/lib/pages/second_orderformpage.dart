@@ -32,8 +32,14 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
   @override
   void initState() {
     super.initState();
+    _addressController.clear();
+    _cityController.clear();
+    _stateController.clear();
+    _zipCodeController.clear();
+    _selectedCuisine = null;
     _loadUserDelivery();
   }
+
 
   Future<void> _loadUserDelivery() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -52,10 +58,6 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
       setState(() {
         _documentId = doc.id;
         _selectedCuisine = data['cuisine'];
-        _addressController.text = data['address'];
-        _cityController.text = data['city'];
-        _stateController.text = data['state'];
-        _zipCodeController.text = data['zip'];
       });
 
       print("Loaded delivery data for ${user.email}");
@@ -118,6 +120,12 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
                   orderData: orderData,
                 )),
       );
+      _addressController.clear();
+      _cityController.clear();
+      _stateController.clear();
+      _zipCodeController.clear();
+      _selectedCuisine = null;
+      setState(() {}); // To refresh the dropdown
     } catch (e) {
       print('🔥 Firestore error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
