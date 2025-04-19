@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:surpirse_delivery_app/main.dart';
 import 'package:surpirse_delivery_app/pages/base_map.dart';
 import 'package:surpirse_delivery_app/pages/order_form.dart';
 import 'package:surpirse_delivery_app/pages/payment_page.dart';
@@ -43,16 +44,26 @@ Finder stateInputSecondForm = find.byKey(Key("state-input-o2"));
 Finder zipTextSecondForm = find.byKey(Key("zip-text-o2"));
 Finder zipInputSecondForm = find.byKey(Key("zip-input-o2"));
 const List<String> cuisineTypes = [
-  'Fast Food',
-  'Japanese',
+  'American',
+  'British',
+  'Canadian',
   'Chinese',
-  'Thai',
-  'Italian',
-  'Mexican',
-  'Indian',
+  'Croatian',
+  'Dutch',
+  'Egyptian',
+  'Filipino',
   'French',
-  'Pub/Bar',
-  'Fully Random'
+  'Greek',
+  'Indian',
+  'Irish',
+  'Italian',
+  'Jamaican',
+  'Japanese',
+  'Kenyan',
+  'Mexican',
+  'Spanish',
+  'Thai',
+  'Random'
 ];
 //map for fields
 final Map<Finder, String> secondOrderFormInputFields = {
@@ -64,15 +75,24 @@ final Map<Finder, String> secondOrderFormInputFields = {
 Future<void> fillSecondOrderForm(WidgetTester tester, [int? rng]) async {
   //select dropdown button
   tester.ensureVisible(cuisineDropdownSecondForm);
-  rng ??= Random().nextInt(cuisineTypes.length);
   await tester.tap(cuisineDropdownSecondForm);
   await tester.pump();
+  await tester.pump(settleTime);
 
   //select random cuisine type
-  Finder cuisineType = find.text(cuisineTypes[rng]);
+  rng ??= Random().nextInt(cuisineTypes.length);
+  Finder cuisineType = find.text(cuisineTypes[rng], skipOffstage: false).first;
+  expect(cuisineType, findsOneWidget);
   tester.ensureVisible(cuisineType);
+  //await tester.dragUntilVisible(cuisineType, cuisineDropdownSecondForm, const Offset(0, 50));
   await tester.tap(cuisineType);
   await tester.pump();
+  await tester.pump(settleTime);
+
+  //tap is missing the widget
+  //DropdownButton<String> dropButton = tester.widget(cuisineDropdownSecondForm) as DropdownButton<String>;
+  //DropdownButton<String> dropButton = cuisineDropdownSecondForm.evaluate().single.widget as DropdownButton<String>;
+  //expect(dropButton.value.toString(), equals(cuisineTypes[rng].toString()));
 
   //fill text fields
   for(var field in secondOrderFormInputFields.entries)

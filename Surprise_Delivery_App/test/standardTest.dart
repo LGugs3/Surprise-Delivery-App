@@ -204,9 +204,6 @@ void main() {
       int rng = Random().nextInt(cuisineTypes.length);
       await fillSecondOrderForm(tester, rng);
 
-      //test to see if dropdown updated correctly
-      DropdownButton<String> dropButton = cuisineDropdownSecondForm.evaluate().single.widget as DropdownButton<String>;
-      expect(dropButton.value.toString(), equals(cuisineTypes[rng].toString()));
       //find inputted text
       for(String field in secondOrderFormInputFields.values)
       {

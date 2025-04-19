@@ -66,6 +66,7 @@ class _SecondOrderPageState extends State<SecondOrderPage> {
 
   Future<void> _saveDelivery() async {
     if (Firebase.apps.isEmpty){//for tests
+      orderData.cuisineSelection = _selectedCuisine!;
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Payment(orderData: orderData,)),
