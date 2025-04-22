@@ -8,7 +8,9 @@ class Meal {
   List<String> selectedDietaryRestrictions = [];
   bool isKidsMeal = false; // Add this to track kids meal
 
-  Meal({this.isKidsMeal = false}); // Constructor for kids meal
+  Meal(this.mainCount, this.sideCount, this.drinkCount, this.dessertCount, this.isKidsMeal);
+  Meal.kids() : this(1, 1, 1, 1, true);
+  Meal.empty() : this(0, 0, 0, 0, false);
 
   // Increment counter
   void incrementCounter(String mealType) {

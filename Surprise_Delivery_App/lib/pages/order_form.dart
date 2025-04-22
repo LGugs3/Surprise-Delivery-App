@@ -31,25 +31,23 @@ class _OrderFormState extends State<OrderForm> {
     'Vegetarian',
     'Vegan',
     'Halal',
-    'Kosher',
     'Pescatarian',
-    'Gluten Free'
   ];
 
   // List to store meal data
-  final List<Meal> _meals = [Meal()];
+  final List<Meal> _meals = [Meal.empty()];
 
   // Function to add a new meal
   void _addMeal() {
     setState(() {
-      _meals.add(Meal());
+      _meals.add(Meal.empty());
     });
   }
 
   // Function to add a kids meal
   void _addKidsMeal() {
     setState(() {
-      _meals.add(Meal(isKidsMeal: true));
+      _meals.add(Meal.kids());
     });
   }
 
