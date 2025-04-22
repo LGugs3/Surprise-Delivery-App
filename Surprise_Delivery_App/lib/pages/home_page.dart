@@ -61,15 +61,25 @@ class _HomePageState extends State<HomePage> {
       StreamController<int>.broadcast(); // Use broadcast
 
   final List<String> cuisineOptions = [
-    'Fast Food',
-    'Japanese',
+    'American',
+    'British',
+    'Canadian',
     'Chinese',
-    'Thai',
-    'Italian',
-    'Mexican',
-    'Indian',
+    'Croatian',
+    'Dutch',
+    'Egyptian',
+    'Filipino',
     'French',
-    'Pub/Bar'
+    'Greek',
+    'Indian',
+    'Irish',
+    'Italian',
+    'Jamaican',
+    'Japanese',
+    'Kenyan',
+    'Mexican',
+    'Spanish',
+    'Thai',
   ];
 
   String selectedCuisine = "";
